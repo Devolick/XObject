@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -117,6 +118,7 @@ namespace XObjectSerializer
         /// <returns>Returns cloned object</returns>
         public static TClone Clone<TClone>(TClone o)
         {
+            if (o == null) throw new XObjectException("It is not permissible to clone a null reference.");
             string serialize = new Serialize().Build(o.GetType(), o);
             return (TClone)new Deserialize().Build(typeof(TClone), serialize);
         }
