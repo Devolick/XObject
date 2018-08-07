@@ -10,7 +10,7 @@ namespace XSerializer.Tests
         public string LastName { get; set; }
         public int Age { get; set; }
         public int RealAge { get; set; }
-        public string Empty { get; set; }
+
 
         public PersonInfo() { }
     }
@@ -28,7 +28,7 @@ namespace XSerializer.Tests
         public PersonInfo Info { get; set; }
         public PortfolioList Portfolio { get; set; }
         public string Secret { get; set; }
-
+        public string Empty { get; set; }
 
         public Person()
         {

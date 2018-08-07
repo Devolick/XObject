@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -84,8 +85,8 @@ namespace XSerializer
 
         protected bool ReferenceExists(object o)
         {
-            if (ignoreRootReference) { ignoreRootReference = false; return true; };
-            if (!references.Any(a => a.Equals(o)))
+            if (ignoreRootReference) { ignoreRootReference = false; return false; };
+            if (references.Any(a => a.Equals(o)))
             {
                 return true;
             }
@@ -93,12 +94,10 @@ namespace XSerializer
         }
         protected bool SmartReferenceExists(object o)
         {
-            if (ignoreRootReference) { ignoreRootReference = false; return true; };
+            if (ignoreRootReference) { ignoreRootReference = false; return false; };
             string value = o.ToString();
-            if (Math.Floor(Math.Log10(references.Count) + 1) >
-                Math.Floor(Math.Log10(value.Length) + 1)) return true;
 
-            if (!references.Any(a => {
+            if (references.Any(a => {
                 if ((a as string) != null)
                 {
                     return (string)a == value;
@@ -112,10 +111,14 @@ namespace XSerializer
         }
         protected void AddReference(object o)
         {
+            Debug.WriteLine($"AddReference Index:{references.Count},Type:{o.GetType().FullName},ToString:{o.ToString()}");
             references.Add(o);
         }
         protected void AddSmartReference(string o)
         {
+            if (Math.Floor(Math.Log10(references.Count) + 1) >
+                Math.Floor(Math.Log10(o.Length) + 1)) return;
+            Debug.WriteLine($"AddSmartReference Index:{references.Count},Type:{o.GetType().FullName},ToString:{o.ToString()}");
             references.Add(o);
         }
         protected object GetReference(int id)

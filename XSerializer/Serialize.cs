@@ -18,17 +18,23 @@ namespace XSerializer
         }
         protected string CollectionBlock(Type type, object o)
         {
-            if (ReferenceExists(o))
+            if (!ReferenceExists(o))
             {
                 StringBuilder complex = new StringBuilder();
                 uint count = 0;
                 foreach (object op in EachHelper.EachValues(o))
                 {
-                    complex.Append($"{count++}{Build(op)}");
+                    if (op == null) continue;
+                    string value = Build(op);
+                    if (string.IsNullOrEmpty(value)) continue;
+                    complex.Append($"{count++}{value}");
                 }
                 foreach (object item in (o as IEnumerable))
                 {
-                    complex.Append($"I{Build(item)}");
+                    if (item == null) continue;
+                    string value = Build(item);
+                    if (string.IsNullOrEmpty(value)) continue;
+                    complex.Append($"I{value}");
                 }
                 AddReference(o);
                 return $"\"{complex}\"";
@@ -40,14 +46,17 @@ namespace XSerializer
         }
         protected string ComplexBlock(Type type, object o)
         {
-            if (ReferenceExists(o))
+            if (!ReferenceExists(o))
             {
                 StringBuilder complex = new StringBuilder();
                 uint count = 0;
                 foreach (object op in EachHelper.EachValues(o))
                 {
+                    if (op == null) continue;
                     string value = Build(op);
-                    complex.Append($"{count++}{}");
+                    if (string.IsNullOrEmpty(value)) continue;
+
+                    complex.Append($"{count++}{value}");
                 }
                 AddReference(o);
                 return $"\"{complex}\"";
@@ -60,7 +69,7 @@ namespace XSerializer
         protected string DateTimeBlock(Type type, object o)
         {
             string value = AddProtect($"'{((DateTime)o).ToString("yyyy-MM-dd HH:mm:ss")}'");
-            if (SmartReferenceExists(value))
+            if (!SmartReferenceExists(value))
             {
                 AddSmartReference(value);
                 return $"'{value}'";
@@ -72,8 +81,8 @@ namespace XSerializer
         }
         protected string EnumBlock(Type type, object o)
         {
-            string value = AddProtect(((int)o).ToString());
-            if (SmartReferenceExists(value))
+            string value = ((int)o).ToString();
+            if (!SmartReferenceExists(value))
             {
                 AddSmartReference(value);
                 return $"'{value}'";
@@ -85,7 +94,7 @@ namespace XSerializer
         }
         protected string KeyPairBlock(Type type, object o)
         {
-            if (ReferenceExists(o))
+            if (!ReferenceExists(o))
             {
                 PropertyInfo k = type.GetProperty("Key");
                 PropertyInfo v = type.GetProperty("Value");
@@ -100,8 +109,8 @@ namespace XSerializer
         }
         protected string NumberBlock(Type type, object o)
         {
-            string value = AddProtect(o.ToString());
-            if (SmartReferenceExists(value))
+            string value = o.ToString();
+            if (!SmartReferenceExists(value))
             {
                 AddSmartReference(value);
                 return $"'{value}'";
@@ -113,8 +122,11 @@ namespace XSerializer
         }
         protected string StringBlock(Type type, object o)
         {
-            string value = AddProtect((string)o);
-            if (SmartReferenceExists(value))
+            string value = (string)o;
+            if (string.IsNullOrEmpty(value)) return null;
+
+            value = AddProtect(value);
+            if (!SmartReferenceExists(value))
             {
                 AddSmartReference(value);
                 return $"'{value}'";
