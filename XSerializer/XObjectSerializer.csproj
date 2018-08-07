@@ -8,13 +8,14 @@
     <RootNamespace>XObjectSerializer</RootNamespace>
     <ApplicationIcon>xobject_icon.ico</ApplicationIcon>
     <PackageProjectUrl>http://nonedevelopment.net/</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/Devolick/XObject/master/appline_icon.ico</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Devolick/XObject/master/XSerializer/xobject_icon.ico</PackageIconUrl>
     <RepositoryUrl>https://github.com/Devolick/XObject</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>Serializer, Compress, Complex Object, Files, Strings</PackageTags>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Devolick/XObject/master/LICENSE</PackageLicenseUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>XObjectSerializer.pfx</AssemblyOriginatorKeyFile>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
