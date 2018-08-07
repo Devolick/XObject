@@ -30,7 +30,6 @@ namespace XObjectSerializer.Tests
             Person person = new Person();
             string serialize = XObject.XSerialize(person);
             Console.WriteLine($"new Person() Serialize:\n{serialize}");
-            Debug.WriteLine("------------------");
             Person deserializeObj = XObject.XDeserialize<Person>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"\nnew Person() Deserialize:\n{deserialize}");

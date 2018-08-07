@@ -123,14 +123,12 @@ namespace XObjectSerializer
         }
         protected void AddReference(object o)
         {
-            Debug.WriteLine($"AddReference Index:{references.Count},Type:{o.GetType().FullName},ToString:{o.ToString()}");
             references.Add(o);
         }
         protected void AddSmartReference(string o)
         {
             if (Math.Floor(Math.Log10(references.Count) + 1) >
                 Math.Floor(Math.Log10(o.Length) + 1)) return;
-            Debug.WriteLine($"AddSmartReference Index:{references.Count},Type:{o.GetType().FullName},ToString:{o.ToString()}");
             references.Add(o);
         }
         protected object GetReference(int id, bool clone)
