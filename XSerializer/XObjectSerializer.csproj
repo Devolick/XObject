@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>A serializer for complex objects based on the maximum compression of the file. Used for data transfer, as well as for files. Uses the reflection of identical data. Will help save more space up to 70%.</Description>
+    <Authors>Dzmitry Dym</Authors>
+    <AssemblyName>XObject</AssemblyName>
+    <RootNamespace>XObjectSerializer</RootNamespace>
+    <ApplicationIcon>xobject_icon.ico</ApplicationIcon>
+    <PackageProjectUrl>http://nonedevelopment.net/</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Devolick/XObject/master/appline_icon.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/Devolick/XObject</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>Serializer, Compress, Complex Object, Files, Strings</PackageTags>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Devolick/XObject/master/LICENSE</PackageLicenseUrl>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>XObjectSerializer.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\XObject.xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
-namespace XSerializer.Tests
+namespace XObjectSerializer.Tests
 {
     public class ConcurrentStacks: ColletionHelper
     {

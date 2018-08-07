@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XSerializer\XSerializer.csproj" />
+    <ProjectReference Include="..\XSerializer\XObjectSerializer.csproj" />
   </ItemGroup>
 
 </Project>

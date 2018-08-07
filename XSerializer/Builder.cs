@@ -8,17 +8,29 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace XSerializer
+namespace XObjectSerializer
 {
     internal abstract class Builder : IDisposable
     {
         private IList<object> references;
         private bool ignoreRootReference;
+        protected string dateFormat;
+        protected IFormatProvider dateFormatProvider;
 
         internal Builder()
         {
             references = new List<object>(128);
             ignoreRootReference = true;
+        }
+        internal Builder(string dateFormat)
+            :this()
+        {
+            this.dateFormat = dateFormat;
+        }
+        internal Builder(string dateFormat, IFormatProvider dateFormatProvider)
+            :this(dateFormat)
+        {
+            this.dateFormatProvider = dateFormatProvider;
         }
 
         protected bool IsBoolType(Type type)
@@ -121,9 +133,21 @@ namespace XSerializer
             Debug.WriteLine($"AddSmartReference Index:{references.Count},Type:{o.GetType().FullName},ToString:{o.ToString()}");
             references.Add(o);
         }
-        protected object GetReference(int id)
+        protected object GetReference(int id, bool clone)
         {
-            return references[id];
+            if (clone)
+            {
+                return MirrorClone(references[id]);
+            }
+            else
+            {
+                return references[id];
+            }
+        }
+        internal static object MirrorClone(object o)
+        {
+            string serialize = new Serialize().Build(o.GetType(), o);
+            return new Deserialize().Build(o.GetType(), serialize);
         }
         protected int SameObject(object o, bool referenceType)
         {

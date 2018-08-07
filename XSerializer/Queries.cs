@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace XSerializer
+namespace XObjectSerializer
 {
     internal static class Queries
     {
-        internal const string OBJ = @"([0-9]+|[A-Z])(""((([0-9]+|[A-Z]))(?:(('(?:(?=[0-9]+|\0)|[^'])+?'))|((""(?:(?=[0-9]+|\0)|[^""])+"")))|(`[0-9]+)){1,}"")";
-        //internal const string OBJ = @"((([0-9]+|[A-Z])""((([0-9]+|[A-Z])(?:('(?:''|[^'])+')|(""(?:""""|[^""])+"")))){1,}"")|(([0-9]+|[A-Z])""`[0-9]+"")|(([0-9]+|[A-Z])"".+?""))";
+        internal const string OBJ = @"([0-9]+|[A-Z])(""((`[0-9]+)|(([0-9]+|[A-Z]))(?:('(''|[^'])+')|(""(?:(?=[0-9]+|\0)|[^""])+""))){1,}"")";
         internal const string VAL = @"[0-9A-Z]+'(?:''|[^'])+'";
-        //internal const string HEAD = @"(?<=@"").+(?="")";
         internal const string BODY = @"(?<=&"").+(?="")";
         internal const string PRFO = @"^{0}[""]";
         internal const string PRFV = @"^{0}[']";
@@ -18,9 +16,6 @@ namespace XSerializer
         internal const string CENV = @"(?<=').+(?='$)";
         internal const string ANY = @"^{0}[""']";
         internal const string IPNT = @"^`[0-9]";
-        //internal const string OPNT = @"^[0-9]`[0-9]+[""']";
-        //internal const string OPNTV = @"((?<=`)[0-9]+?(?=[""'])){1}";
-        //internal const string OPNTVV = @"(?<=[""']).+(?=[""']$)";
 
         internal static string[] RSTRINGS = new string[3] { "`", "'", "\"" };
 

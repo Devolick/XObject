@@ -3,7 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace XSerializer.Tests
+
+namespace XObjectSerializer.Tests
 {
     [TestClass]
     public class EqualTests
@@ -17,7 +18,7 @@ namespace XSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym"
             };
-            Assert.IsTrue(XObject.XSerialize<Valid>(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid) == test);
         }
         [TestMethod]
         public void InvalidByString()
@@ -28,10 +29,10 @@ namespace XSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym"
             };
-            Assert.IsFalse(XObject.XSerialize<Valid>(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid) == test);
         }
         [TestMethod]
-        public void ValidProtectString()
+        public void ValidCheckProtectString()
         {
             string test = @"&""0'``Dzmitri '' """" Dym'1'5'""";
             Valid valid = new Valid()
@@ -39,10 +40,10 @@ namespace XSerializer.Tests
                 Int = 5,
                 Str = @"`Dzmitri ' "" Dym"
             };
-            Assert.IsTrue(XObject.XSerialize<Valid>(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid) == test);
         }
         [TestMethod]
-        public void InvalidProtectString()
+        public void InvalidCheckProtectString()
         {
             string test = @"&""0'`Dzmitri ' "" Dym'1'5'""";
             Valid valid = new Valid()
@@ -50,7 +51,7 @@ namespace XSerializer.Tests
                 Int = 5,
                 Str = @"`Dzmitry ' "" Dym"
             };
-            Assert.IsFalse(XObject.XSerialize<Valid>(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid) == test);
         }
     }
 }

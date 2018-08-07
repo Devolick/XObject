@@ -7,13 +7,16 @@ using System.Linq;
 using System.Collections;
 using System.Diagnostics;
 
-namespace XSerializer
+namespace XObjectSerializer
 {
-    internal class Deserialize<TObject> : Builder
+    internal class Deserialize : Builder
     {
         internal Deserialize()
-             : base() {
-        }
+        { }
+        internal Deserialize(string dateFormat)
+            : base(dateFormat) { }
+        internal Deserialize(string dateFormat, IFormatProvider dateFormatProvider)
+            : base(dateFormat, dateFormatProvider) { }
 
         protected object BooleanBlock(Type type, string x)
         {
@@ -23,7 +26,7 @@ namespace XSerializer
         {
             if (Regex.IsMatch(x, Queries.IPNT))
             {
-                return GetReference(int.Parse(x.Remove(0, 1)));
+                return GetReference(int.Parse(x.Remove(0, 1)), true);
             }
             else
             {
@@ -36,7 +39,7 @@ namespace XSerializer
         {
             if (Regex.IsMatch(x, Queries.IPNT))
             {
-                return GetReference(int.Parse(x.Remove(0, 1)));
+                return GetReference(int.Parse(x.Remove(0, 1)), true);
             }
             else
             {
@@ -50,11 +53,19 @@ namespace XSerializer
             x = RemoveProtect(x);
             if (Regex.IsMatch(x, Queries.IPNT))
             {
-                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1))), Type.GetTypeCode(type));
+                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
             else
             {
-                object value = Convert.ChangeType(x, Type.GetTypeCode(type));
+                object value = null;
+                if (string.IsNullOrEmpty(dateFormat))
+                {
+                    value = DateTime.Parse(x, dateFormatProvider);
+                }
+                else
+                {
+                    value = DateTime.ParseExact(x, dateFormat, dateFormatProvider);
+                }
                 AddSmartReference(x);
                 return value;
             }
@@ -63,7 +74,7 @@ namespace XSerializer
         {
             if (Regex.IsMatch(x, Queries.IPNT))
             {
-                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1))), Type.GetTypeCode(type));
+                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
             else
             {
@@ -76,7 +87,7 @@ namespace XSerializer
         {
             if (Regex.IsMatch(x, Queries.IPNT))
             {
-                return GetReference(int.Parse(x.Remove(0, 1)));
+                return GetReference(int.Parse(x.Remove(0, 1)), true);
             }
             else
             {
@@ -89,7 +100,7 @@ namespace XSerializer
         {
             if (Regex.IsMatch(x, Queries.IPNT))
             {
-                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1))), Type.GetTypeCode(type));
+                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
             else
             {
@@ -104,7 +115,7 @@ namespace XSerializer
             x = RemoveProtect(x);
             if (Regex.IsMatch(x, Queries.IPNT))
             {
-                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1))), Type.GetTypeCode(type));
+                return GetReference(int.Parse(x.Remove(0, 1)), false).ToString();
             }
             else
             {
@@ -112,40 +123,71 @@ namespace XSerializer
                 return x;
             }
         }
-        
+        protected object NullableBlock(Type type, string x)
+        {
+            if (type.IsGenericType &&
+                type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                return Build(type.GetGenericArguments()[0], x);
+            }
+            return null;
+        }
+        protected object DBNullBlock(Type type, string x)
+        {
+            return null;
+        }
+
         internal object Build(Type type, string x)
         {
-            if (IsBoolType(type))
+            if (IsNullableType(type))
             {
-                return BooleanBlock(type, x);
+                try { return NullableBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing Nullable type.", ex); }
+            }
+            else if (IsDBNullType(type))
+            {
+                try { return DBNullBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing DBNull type.", ex); }
+            }
+            else if (IsBoolType(type))
+            {
+                try { return BooleanBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing Boolean type.", ex); }
             }
             else if (IsNumberType(type))
             {
-                return NumberBlock(type, x);
+                try { return NumberBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing Number type.", ex); }
             }
             else if (IsStringType(type))
             {
-                return StringBlock(type, x);
+                try { return StringBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing String type.", ex); }
             }
             else if (IsEnumType(type))
             {
-                return EnumBlock(type, x);
+                try { return EnumBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing Enum type.", ex); }
             }
             else if (IsDateTimeType(type))
             {
-                return DateTimeBlock(type, x);
+                try { return DateTimeBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing DateTime type.", ex); }
             }
             else if (IsKeyPairType(type))
             {
-                return KeyPairBlock(type, x);
+                try { return KeyPairBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing KeyPair type.", ex); }
             }
             else if (IsCollectionType(type))
             {
-                return CollectionBlock(type, x);
+                try { return CollectionBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing Collection type.", ex); }
             }
             else //Complex Object
             {
-                return ComplexBlock(type, x);
+                try { return ComplexBlock(type, x); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while deserializing Object type.", ex); }
             }
         }
 

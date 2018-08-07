@@ -4,21 +4,25 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace XSerializer
+namespace XObjectSerializer
 {
-    internal class Serialize<TObject> : Builder
+    internal class Serialize : Builder
     {
         internal Serialize()
-            : base() { }
+        { }
+        internal Serialize(string dateFormat)
+            : base(dateFormat) { }
+        internal Serialize(string dateFormat, IFormatProvider dateFormatProvider)
+            : base(dateFormat, dateFormatProvider) { }
 
-        protected string BooleanBlock(Type type,object o)
+        protected string BooleanBlock(Type type, object o)
         {
             string value = ((bool)o ? 1 : 0).ToString();
             return $"'{value}'";
         }
-        protected string DateTimeBlock(Type type, object o, int position)
+        protected string DateTimeBlock(Type type, object o)
         {
-            string value = AddProtect($"'{((DateTime)o).ToString("yyyy-MM-dd HH:mm:ss")}'");
+            string value = AddProtect($"{((DateTime)o).ToString(dateFormat, dateFormatProvider)}");
             if (!SmartReferenceExists(value))
             {
                 AddSmartReference(value);
@@ -29,7 +33,7 @@ namespace XSerializer
                 return $"'`{SameObject(value, false)}'";
             }
         }
-        protected string EnumBlock(Type type, object o, int position)
+        protected string EnumBlock(Type type, object o)
         {
             string value = ((int)o).ToString();
             if (!SmartReferenceExists(value))
@@ -42,7 +46,7 @@ namespace XSerializer
                 return $"'`{SameObject(value, false)}'";
             }
         }
-        protected string NumberBlock(Type type, object o, int position)
+        protected string NumberBlock(Type type, object o)
         {
             string value = o.ToString();
             if (!SmartReferenceExists(value))
@@ -55,7 +59,7 @@ namespace XSerializer
                 return $"'`{SameObject(value, false)}'";
             }
         }
-        protected string StringBlock(Type type, object o, int position)
+        protected string StringBlock(Type type, object o)
         {
             string value = (string)o;
             if (string.IsNullOrEmpty(value)) return null;
@@ -71,13 +75,13 @@ namespace XSerializer
                 return $"'`{SameObject(value, false)}'";
             }
         }
-        protected string KeyPairBlock(Type type, object o, int position)
+        protected string KeyPairBlock(Type type, object o)
         {
             if (!ReferenceExists(o))
             {
                 PropertyInfo k = type.GetProperty("Key");
                 PropertyInfo v = type.GetProperty("Value");
-                string value = $"\"0{Build(k.GetValue(o))}1{Build(v.GetValue(o))}\"";
+                string value = $"\"0{Build(k.PropertyType, k.GetValue(o))}1{Build(v.PropertyType, v.GetValue(o))}\"";
                 AddReference(o);
                 return value;
             }
@@ -86,23 +90,24 @@ namespace XSerializer
                 return $"\"`{SameObject(o, false)}\"";
             }
         }
-        protected string CollectionBlock(Type type, object o, int position)
+        protected string CollectionBlock(Type type, object o)
         {
             if (!ReferenceExists(o))
             {
                 StringBuilder complex = new StringBuilder();
                 uint count = 0;
-                foreach (object op in EachHelper.EachValues(o))
+                foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
-                    if (op == null) continue;
-                    string value = Build(op);
+                    object piValue = pi.GetValue(o);
+                    if (piValue == null) continue;
+                    string value = Build(pi.PropertyType, piValue);
                     if (string.IsNullOrEmpty(value)) continue;
                     complex.Append($"{count++}{value}");
                 }
                 foreach (object item in (o as IEnumerable))
                 {
                     if (item == null) continue;
-                    string value = Build(item);
+                    string value = Build(item.GetType(), item);
                     if (string.IsNullOrEmpty(value)) continue;
                     complex.Append($"I{value}");
                 }
@@ -114,16 +119,17 @@ namespace XSerializer
                 return $"\"`{SameObject(o, true)}\"";
             }
         }
-        protected string ComplexBlock(Type type, object o, int position)
+        protected string ComplexBlock(Type type, object o)
         {
             if (!ReferenceExists(o))
             {
                 StringBuilder complex = new StringBuilder();
                 uint count = 0;
-                foreach (object op in EachHelper.EachValues(o))
+                foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
-                    if (op == null) continue;
-                    string value = Build(op);
+                    object piValue = pi.GetValue(o);
+                    if (piValue == null) continue;
+                    string value = Build(pi.PropertyType, piValue);
                     if (string.IsNullOrEmpty(value)) continue;
 
                     complex.Append($"{count++}{value}");
@@ -136,41 +142,70 @@ namespace XSerializer
                 return $"\"`{SameObject(o, true)}\"";
             }
         }
-
-        internal string Build(object o, int position)
+        protected string NullableBlock(Type type, object o)
         {
-            Type type = o.GetType();
-            if (IsBoolType(type))
+            if (o != null)
             {
-                return BooleanBlock(type, o);
+                return Build(type.GetGenericArguments()[0], o);
+            }
+            return null;
+        }
+        protected string DBNullBlock(Type type, object o)
+        {
+            return null;
+        }
+
+        internal string Build(Type type, object o)
+        {
+            if (IsNullableType(type))
+            {
+                try { return NullableBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing Nullable type.", ex); }
+            }
+            else if (IsDBNullType(type))
+            {
+                try { return DBNullBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing DBNull type.", ex); }
+            }
+            else if (IsBoolType(type))
+            {
+                try { return BooleanBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing Boolean type.", ex); }
             }
             else if (IsNumberType(type))
             {
-                return NumberBlock(type, o, position);
+                try { return NumberBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing Number type.", ex); }
             }
             else if (IsStringType(type))
             {
-                return StringBlock(type, o, position);
+                try { return StringBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing String type.", ex); }
             }
             else if (IsEnumType(type))
             {
-                return EnumBlock(type, o, position);
+                try { return EnumBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing Enum type.", ex); }
             }
             else if (IsDateTimeType(type))
             {
-                return DateTimeBlock(type, o, position);
+                try { return DateTimeBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing DateTime type.", ex); }
             }
             else if (IsKeyPairType(type))
             {
-                return KeyPairBlock(type, o, position);
+                try { return KeyPairBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing KeyPair type.", ex); }
             }
             else if (IsCollectionType(type))
             {
-                return CollectionBlock(type, o, position);
+                try { return CollectionBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing Collection type.", ex); }
             }
             else //Complex Object
             {
-                return ComplexBlock(type, o, position);
+                try { return ComplexBlock(type, o); }
+                catch (Exception ex) { throw new XObjectException("An error occurred while serializing Object type.", ex); }
             }
         }
 

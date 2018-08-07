@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XSerializer.Tests
+namespace XObjectSerializer.Tests
 {
     public class Types
     {
@@ -19,9 +19,13 @@ namespace XSerializer.Tests
         public Single Single { get; set; }
         public Decimal Decimal { get; set; }
         public string String { get; set; }
-        //public Nullable<int> NullInt { get; set; }
+        public DateTime Date { get; set; }
+        public Nullable<int> NullInt { get; set; }
+        public Nullable<int> NullIntEmpty { get; set; }
+        public DBNull DBNull { get; set; }
 
-        public Types() {
+        public Types()
+        {
             Bool = true;
             Char = 'A';
             SByte = 15;
@@ -35,7 +39,8 @@ namespace XSerializer.Tests
             Single = 17;
             Decimal = 18;
             String = "say hello";
-            //NullInt = 1234;
+            Date = DateTime.Now;
+            NullInt = 1234;
         }
     }
 }

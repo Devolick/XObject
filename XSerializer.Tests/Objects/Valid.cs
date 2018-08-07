@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XSerializer.Tests
+namespace XObjectSerializer.Tests
 {
     public class Valid
     {

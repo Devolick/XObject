@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace XSerializer
+namespace XObjectSerializer
 {
     internal static class EachHelper
     {
@@ -34,5 +34,6 @@ namespace XSerializer
                 yield return propInfo;
             }
         }
+
     }
 }

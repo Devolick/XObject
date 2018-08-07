@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace XSerializer
+namespace XObjectSerializer
 {
     internal class ProxyCollection
     {
@@ -38,16 +38,16 @@ namespace XSerializer
                     Type innerEm = proxyConstructor.GetParameters()[0].ParameterType;
                     if (innerEm.GetGenericTypeDefinition() == typeof(IDictionary<,>))
                     {
-                        ItemType = typeof(KeyValuePair<,>).MakeGenericType(innerEm.GetGenericArguments()[0], innerEm.GetGenericArguments()[1]);
+                        ItemType = typeof(KeyValuePair<,>).MakeGenericType(innerEm.GetTypeInfo().GetGenericArguments()[0], innerEm.GetTypeInfo().GetGenericArguments()[1]);
                         var innerCollectionType = typeof(Dictionary<,>);
-                        var innerColectionCtorType = innerCollectionType.MakeGenericType(innerEm.GetGenericArguments()[0], innerEm.GetGenericArguments()[1]);
+                        var innerColectionCtorType = innerCollectionType.MakeGenericType(innerEm.GetTypeInfo().GetGenericArguments()[0], innerEm.GetTypeInfo().GetGenericArguments()[1]);
                         innerDictionary = Activator.CreateInstance(innerColectionCtorType) as IDictionary;
                     }
                     else
                     {
                         if (innerEm.IsGenericType)
                         {
-                            ItemType = innerEm.GetGenericArguments()[0];
+                            ItemType = innerEm.GetTypeInfo().GetGenericArguments()[0];
                         }
                         else
                         {

@@ -7,178 +7,141 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 
-namespace XSerializer.Tests
+namespace XObjectSerializer.Tests
 {
     [TestClass]
-    public class XObjectTests
+    public class XCollectionsTests
     {
         [TestMethod]
-        public void XObjectSameReferences()
-        {
-            SameReference types = new SameReference();
-            string serialize = XObject.XSerialize<SameReference>(types);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
-            SameReference deserializeObj = XObject.XDeserialize<SameReference>(serialize);
-            string deserialize = XObject.XSerialize<SameReference>(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
-
-            Assert.IsTrue(deserialize == serialize);
-        }
-        [TestMethod]
-        public void XObjectTypes()
-        {
-            Types types = new Types();
-            string serialize = XObject.XSerialize<Types>(types);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
-            Types deserializeObj = XObject.XDeserialize<Types>(serialize);
-            string deserialize = XObject.XSerialize<Types>(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
-
-            Assert.IsTrue(deserialize == serialize);
-        }
-        [TestMethod]
-        public void XObjectPerson()
-        {
-            Person person = new Person();
-            string serialize = XObject.XSerialize<Person>(person);
-            Console.WriteLine($"new Person() Serialize:\n{serialize}");
-            Debug.WriteLine("------------------");
-            Person deserializeObj = XObject.XDeserialize<Person>(serialize);
-            string deserialize = XObject.XSerialize<Person>(deserializeObj);
-            Console.WriteLine($"\nnew Person() Deserialize:\n{deserialize}");
-
-            Assert.IsTrue(deserialize.Length == serialize.Length);
-        }
-        [TestMethod]
-        public void XObjectLists()
+        public void Lists()
         {
             Lists example = new Lists(32);
-            string serialize = XObject.XSerialize<Lists>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new Lists(32) Serialize:\n{serialize}");
             Lists deserializeObj = XObject.XDeserialize<Lists>(serialize);
-            string deserialize = XObject.XSerialize<Lists>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"\nnew Lists(32) Deserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectDictionaries()
+        public void Dictionaries()
         {
             Dictionaries example = new Dictionaries(32);
-            string serialize = XObject.XSerialize<Dictionaries>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new Dictionaries(32) Serialize:\n{serialize}");
             Dictionaries deserializeObj = XObject.XDeserialize<Dictionaries>(serialize);
-            string deserialize = XObject.XSerialize<Dictionaries>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new Dictionaries(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectLinkedLists()
+        public void LinkedLists()
         {
             LinkedLists example = new LinkedLists(32);
-            string serialize = XObject.XSerialize<LinkedLists>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new LinkedLists(32) Serialize:\n{serialize}");
             LinkedLists deserializeObj = XObject.XDeserialize<LinkedLists>(serialize);
-            string deserialize = XObject.XSerialize<LinkedLists>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new LinkedLists(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectQueues()
+        public void Queues()
         {
             Queues example = new Queues(32);
-            string serialize = XObject.XSerialize<Queues>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new Queues(32) Serialize:\n{serialize}");
             Queues deserializeObj = XObject.XDeserialize<Queues>(serialize);
-            string deserialize = XObject.XSerialize<Queues>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new Queues(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectSortedDictionaries()
+        public void SortedDictionaries()
         {
             SortedDictionaries example = new SortedDictionaries(32);
-            string serialize = XObject.XSerialize<SortedDictionaries>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new SortedDictionaries(32) Serialize:\n{serialize}");
             SortedDictionaries deserializeObj = XObject.XDeserialize<SortedDictionaries>(serialize);
-            string deserialize = XObject.XSerialize<SortedDictionaries>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new SortedDictionaries(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectSortedLists()
+        public void SortedLists()
         {
             SortedLists example = new SortedLists(32);
-            string serialize = XObject.XSerialize<SortedLists>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new SortedLists(32) Serialize:\n{serialize}");
             SortedLists deserializeObj = XObject.XDeserialize<SortedLists>(serialize);
-            string deserialize = XObject.XSerialize<SortedLists>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new SortedLists(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectSortedSets()
+        public void SortedSets()
         {
             SortedSets example = new SortedSets(32);
-            string serialize = XObject.XSerialize<SortedSets>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new SortedSets(32) Serialize:\n{serialize}");
             SortedSets deserializeObj = XObject.XDeserialize<SortedSets>(serialize);
-            string deserialize = XObject.XSerialize<SortedSets>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new SortedSets(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectStacks()
+        public void Stacks()
         {
             Stacks example = new Stacks(32);
-            string serialize = XObject.XSerialize<Stacks>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new Stacks(32) Serialize:\n{serialize}");
             Stacks deserializeObj = XObject.XDeserialize<Stacks>(serialize);
-            string deserialize = XObject.XSerialize<Stacks>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new Stacks(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectConcurrentBags()
+        public void ConcurrentBags()
         {
             ConcurrentBags example = new ConcurrentBags(32);
-            string serialize = XObject.XSerialize<ConcurrentBags>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new ConcurrentBags(32) Serialize:\n{serialize}");
             ConcurrentBags deserializeObj = XObject.XDeserialize<ConcurrentBags>(serialize);
-            string deserialize = XObject.XSerialize<ConcurrentBags>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new ConcurrentBags(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectConcurrentDictionaries()
+        public void ConcurrentDictionaries()
         {
             ConcurrentDictionaries example = new ConcurrentDictionaries(32);
-            string serialize = XObject.XSerialize<ConcurrentDictionaries>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new ConcurrentDictionaries(32) Serialize:\n{serialize}");
             ConcurrentDictionaries deserializeObj = XObject.XDeserialize<ConcurrentDictionaries>(serialize);
-            string deserialize = XObject.XSerialize<ConcurrentDictionaries>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new ConcurrentDictionaries(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectConcurrentQueues()
+        public void ConcurrentQueues()
         {
             ConcurrentQueues example = new ConcurrentQueues(32);
-            string serialize = XObject.XSerialize<ConcurrentQueues>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new ConcurrentQueues(32) Serialize:\n{serialize}");
             ConcurrentQueues deserializeObj = XObject.XDeserialize<ConcurrentQueues>(serialize);
-            string deserialize = XObject.XSerialize<ConcurrentQueues>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new ConcurrentQueues(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectConcurrentStacks()
+        public void ConcurrentStacks()
         {
             ConcurrentStacks example = new ConcurrentStacks(32);
-            string serialize = XObject.XSerialize<ConcurrentStacks>(example);
+            string serialize = XObject.XSerialize(example);
             Console.WriteLine($"new ConcurrentStacks(32) Serialize:\n{serialize}");
             ConcurrentStacks deserializeObj = XObject.XDeserialize<ConcurrentStacks>(serialize);
-            string deserialize = XObject.XSerialize<ConcurrentStacks>(deserializeObj);
+            string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"new ConcurrentStacks(32) Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
