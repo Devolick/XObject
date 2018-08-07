@@ -11,7 +11,7 @@ using System.Xml;
 namespace XObjectSerializer
 {
     internal abstract class Builder : IDisposable
-    {
+    { 
         private IList<object> references;
         private bool ignoreRootReference;
         protected string dateFormat;
