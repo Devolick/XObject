@@ -65,7 +65,7 @@ namespace XObjectSerializer
 
             using (Deserialize deserialize = new Deserialize())
             {
-                return (TObject)deserialize.Build(typeof(TObject), Regex.Match(x,Queries.BODY).Value);
+                return (TObject)deserialize.Build(typeof(TObject), Regex.Match(x,Queries.BODY, RegexOptions.Compiled).Value);
             }
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace XObjectSerializer
 
             using (Deserialize deserialize = new Deserialize(dateFormat))
             {
-                return (TObject)deserialize.Build(typeof(TObject), Regex.Match(x, Queries.BODY).Value);
+                return (TObject)deserialize.Build(typeof(TObject), Regex.Match(x, Queries.BODY, RegexOptions.Compiled).Value);
             }
         }
         /// <summary>
@@ -96,8 +96,29 @@ namespace XObjectSerializer
 
             using (Deserialize deserialize = new Deserialize(dateFormat,dateFormatProvider))
             {
-                return (TObject)deserialize.Build(typeof(TObject), Regex.Match(x, Queries.BODY).Value);
+                return (TObject)deserialize.Build(typeof(TObject), Regex.Match(x, Queries.BODY, RegexOptions.Compiled).Value);
             }
+        }
+
+        /// <summary>
+        /// Validates the integrity of incoming data.
+        /// </summary>
+        /// <param name="x">serialized string</param>
+        /// <returns>Returns true if is valid</returns>
+        public static bool IsValid(string x)
+        {
+            if (string.IsNullOrEmpty(x)) throw new XObjectException("Invalid empty string.");
+            return Regex.IsMatch(x, Queries.BODYVALID,RegexOptions.Compiled);
+        }
+        /// <summary>
+        /// Produces cloning of this object. You must follow the serialization rules.
+        /// </summary>
+        /// <param name="o">Object for clone</param>
+        /// <returns>Returns cloned object</returns>
+        public static TClone Clone<TClone>(TClone o)
+        {
+            string serialize = new Serialize().Build(o.GetType(), o);
+            return (TClone)new Deserialize().Build(typeof(TClone), serialize);
         }
     }
 }

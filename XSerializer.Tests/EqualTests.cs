@@ -10,6 +10,31 @@ namespace XObjectSerializer.Tests
     public class EqualTests
     {
         [TestMethod]
+        public void IsValidInputX()
+        {
+            string test = @"&""0'Dzmitry Dym'1'4'""";
+            Assert.IsTrue(XObject.IsValid(test));
+        }
+        [TestMethod]
+        public void IsInvalidInputXFirst()
+        {
+            string test = @"'234&""0'Dzmitry Dym'1'4'""";
+            Assert.IsFalse(XObject.IsValid(test));
+        }
+        [TestMethod]
+        public void IsInvalidInputXEnd()
+        {
+            string test = @"&""0'Dzmitry Dym'1'4'""234""";
+            Assert.IsFalse(XObject.IsValid(test));
+        }
+        [TestMethod]
+        public void IsValidInputXMiddle()
+        {
+            string test = @"&""0'Dzmitry ' "" Dym''1'4'""";
+            Assert.IsFalse(XObject.IsValid(test));
+        }
+
+        [TestMethod]
         public void ValidByString()
         {
             string test = @"&""0'Dzmitry Dym'1'4'""";

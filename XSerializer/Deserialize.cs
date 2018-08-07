@@ -38,7 +38,7 @@ namespace XObjectSerializer
         }
         protected object ComplexBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT))
+            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
             {
                 return GetReference(int.Parse(x.Remove(0, 1)), true);
             }
@@ -53,7 +53,7 @@ namespace XObjectSerializer
         protected object DateTimeBlock(Type type, string x)
         {
             x = RemoveProtect(x);
-            if (Regex.IsMatch(x, Queries.IPNT))
+            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
             {
                 return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
@@ -74,7 +74,7 @@ namespace XObjectSerializer
         }
         protected object EnumBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT))
+            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
             {
                 return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
@@ -87,7 +87,7 @@ namespace XObjectSerializer
         }
         protected object KeyPairBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT))
+            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
             {
                 return GetReference(int.Parse(x.Remove(0, 1)), true);
             }
@@ -101,7 +101,7 @@ namespace XObjectSerializer
         }
         protected object NumberBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT))
+            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
             {
                 return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
@@ -116,7 +116,7 @@ namespace XObjectSerializer
         {
             if (string.IsNullOrEmpty(x)) return null;
             x = RemoveProtect(x);
-            if (Regex.IsMatch(x, Queries.IPNT))
+            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
             {
                 return GetReference(int.Parse(x.Remove(0, 1)), false).ToString();
             }
@@ -198,25 +198,25 @@ namespace XObjectSerializer
         {
             object o = Activator.CreateInstance(type);
             int count = 0;
-            Regex objRx = new Regex(Queries.OBJ);
-            Regex valRx = new Regex(Queries.VAL);
+            Regex objRx = new Regex(Queries.OBJ, RegexOptions.Compiled);
+            Regex valRx = new Regex(Queries.VAL, RegexOptions.Compiled);
             MatchCollection objMatches = objRx.Matches(x);
             MatchCollection valMatches = valRx.Matches(objRx.Replace(x, string.Empty));
 
             foreach (PropertyInfo pi in EachHelper.EachProps(o))
             {
                 string form = string.Format(Queries.PRFO, count);
-                if (objMatches.Any(a => Regex.IsMatch(a, form)))
+                if (objMatches.Any(a => Regex.IsMatch(a, form, RegexOptions.Compiled)))
                 {
-                    string value = objMatches.First(f => Regex.IsMatch(f, form));
+                    string value = objMatches.First(f => Regex.IsMatch(f, form, RegexOptions.Compiled));
                     if (string.IsNullOrEmpty(value)) continue;
-                    pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENO).Value));
+                    pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENO, RegexOptions.Compiled).Value));
                 }
                 else
                 {
-                    string value = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, count)));
+                    string value = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, count), RegexOptions.Compiled));
                     if (string.IsNullOrEmpty(value)) continue;
-                    pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENV).Value));
+                    pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENV, RegexOptions.Compiled).Value));
                 }
                 ++count;
             }
@@ -225,55 +225,55 @@ namespace XObjectSerializer
         private object CollectionBuilder(Type type, string x)
         {
             int count = 0;
-            Regex objRx = new Regex(Queries.OBJ);
-            Regex valRx = new Regex(Queries.VAL);
+            Regex objRx = new Regex(Queries.OBJ, RegexOptions.Compiled);
+            Regex valRx = new Regex(Queries.VAL, RegexOptions.Compiled);
             MatchCollection objMatches = objRx.Matches(x);
             MatchCollection valMatches = valRx.Matches(objRx.Replace(x, string.Empty));
             bool objectItems = false;
             string anyQ = string.Format(Queries.ANY, "I");
             ProxyCollection proxyCollection = null;
-            if (objMatches.Any(a => Regex.IsMatch(a, anyQ)))
+            if (objMatches.Any(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled)))
             {
                 objectItems = true;
-                proxyCollection = new ProxyCollection(type, objMatches.Where(a => Regex.IsMatch(a, anyQ)).Count());
+                proxyCollection = new ProxyCollection(type, objMatches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled)).Count());
             }
-            else if (valMatches.Any(a => Regex.IsMatch(a, anyQ)))
+            else if (valMatches.Any(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled)))
             {
                 objectItems = false;
-                proxyCollection = new ProxyCollection(type, valMatches.Where(a => Regex.IsMatch(a, anyQ)).Count());
+                proxyCollection = new ProxyCollection(type, valMatches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled)).Count());
             }
 
             foreach (PropertyInfo pi in EachHelper.EachProps(proxyCollection.Collection))
             {
                 string form = string.Format(Queries.PRFO, count);
-                if (objMatches.Any(a => Regex.IsMatch(a, form)))
+                if (objMatches.Any(a => Regex.IsMatch(a, form, RegexOptions.Compiled)))
                 {
-                    string value = objMatches.First(f => Regex.IsMatch(f, form));
+                    string value = objMatches.First(f => Regex.IsMatch(f, form, RegexOptions.Compiled));
                     if (string.IsNullOrEmpty(value)) continue;
-                    pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENO).Value));
+                    pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENO, RegexOptions.Compiled).Value));
                 }
                 else
                 {
-                    string value = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, count)));
+                    string value = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, count), RegexOptions.Compiled));
                     if (string.IsNullOrEmpty(value)) continue;
-                    pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENV).Value));
+                    pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENV, RegexOptions.Compiled).Value));
                 }
                 ++count;
             }
             if (objectItems)
             {
-                foreach (string item in objMatches.Where(w => Regex.IsMatch(w, anyQ)))
+                foreach (string item in objMatches.Where(w => Regex.IsMatch(w, anyQ, RegexOptions.Compiled)))
                 {
                     if (string.IsNullOrEmpty(item)) continue;
-                    proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.CENO).Value));
+                    proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.CENO, RegexOptions.Compiled).Value));
                 }
             }
             else
             {
-                foreach (string item in valMatches.Where(w => Regex.IsMatch(w, anyQ)))
+                foreach (string item in valMatches.Where(w => Regex.IsMatch(w, anyQ, RegexOptions.Compiled)))
                 {
                     if (string.IsNullOrEmpty(item)) continue;
-                    proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.CENV).Value));
+                    proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.CENV, RegexOptions.Compiled).Value));
                 }
             }
             proxyCollection.CreateProxy();
@@ -286,35 +286,35 @@ namespace XObjectSerializer
             object keyResult = null;
             object valueResult = null;
             ConstructorInfo ctorKeyValue = type.GetConstructor(new[] { key.PropertyType, value.PropertyType });
-            Regex objRx = new Regex(Queries.OBJ);
-            Regex valRx = new Regex(Queries.VAL);
+            Regex objRx = new Regex(Queries.OBJ, RegexOptions.Compiled);
+            Regex valRx = new Regex(Queries.VAL, RegexOptions.Compiled);
             MatchCollection objMatches = objRx.Matches(x);
             MatchCollection valMatches = valRx.Matches(objRx.Replace(x, string.Empty));
             for (int i = 0; i < 2; i++)
             {
                 string form = string.Format(Queries.PRFO, i);
-                if (objMatches.Any(a => Regex.IsMatch(a, form)))
+                if (objMatches.Any(a => Regex.IsMatch(a, form, RegexOptions.Compiled)))
                 {
-                    string v = objMatches.First(f => Regex.IsMatch(f, form));
+                    string v = objMatches.First(f => Regex.IsMatch(f, form, RegexOptions.Compiled));
                     if (i == 0)
                     {
-                        keyResult = Build(key.PropertyType, Regex.Match(v, Queries.CENO).Value);
+                        keyResult = Build(key.PropertyType, Regex.Match(v, Queries.CENO, RegexOptions.Compiled).Value);
                     }
                     else
                     {
-                        valueResult = Build(value.PropertyType, Regex.Match(v, Queries.CENO).Value);
+                        valueResult = Build(value.PropertyType, Regex.Match(v, Queries.CENO, RegexOptions.Compiled).Value);
                     }
                 }
                 else
                 {
-                    string v = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, i)));
+                    string v = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, i, RegexOptions.Compiled)));
                     if (i == 0)
                     {
-                        keyResult = Build(key.PropertyType, Regex.Match(v, Queries.CENV).Value);
+                        keyResult = Build(key.PropertyType, Regex.Match(v, Queries.CENV, RegexOptions.Compiled).Value);
                     }
                     else
                     {
-                        valueResult = Build(value.PropertyType, Regex.Match(v, Queries.CENV).Value);
+                        valueResult = Build(value.PropertyType, Regex.Match(v, Queries.CENV, RegexOptions.Compiled).Value);
                     }
                 }
             }

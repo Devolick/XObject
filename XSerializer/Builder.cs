@@ -135,17 +135,16 @@ namespace XObjectSerializer
         {
             if (clone)
             {
-                return MirrorClone(references[id]);
+                return Clone(references[id]);
             }
             else
             {
                 return references[id];
             }
         }
-        internal static object MirrorClone(object o)
+        internal object Clone(object o)
         {
-            string serialize = new Serialize().Build(o.GetType(), o);
-            return new Deserialize().Build(o.GetType(), serialize);
+            return XObject.Clone(o);
         }
         protected int SameObject(object o, bool referenceType)
         {
@@ -182,14 +181,14 @@ namespace XObjectSerializer
             {
                 foreach (string re in replacement)
                 {
-                    value = Regex.Replace(value, re, $"{re}{re}");
+                    value = Regex.Replace(value, re, $"{re}{re}", RegexOptions.Compiled);
                 }
             }
             else
             {
                 foreach (string re in replacement)
                 {
-                    value = Regex.Replace(value, $"{re}{re}", re);
+                    value = Regex.Replace(value, $"{re}{re}", re, RegexOptions.Compiled);
                 }
             }
             return value;
