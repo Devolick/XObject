@@ -16,7 +16,7 @@ namespace XSerializer
             string value = ((bool)o ? 1 : 0).ToString();
             return $"'{value}'";
         }
-        protected string DateTimeBlock(Type type, object o)
+        protected string DateTimeBlock(Type type, object o, int position)
         {
             string value = AddProtect($"'{((DateTime)o).ToString("yyyy-MM-dd HH:mm:ss")}'");
             if (!SmartReferenceExists(value))
@@ -29,7 +29,7 @@ namespace XSerializer
                 return $"'`{SameObject(value, false)}'";
             }
         }
-        protected string EnumBlock(Type type, object o)
+        protected string EnumBlock(Type type, object o, int position)
         {
             string value = ((int)o).ToString();
             if (!SmartReferenceExists(value))
@@ -42,7 +42,7 @@ namespace XSerializer
                 return $"'`{SameObject(value, false)}'";
             }
         }
-        protected string NumberBlock(Type type, object o)
+        protected string NumberBlock(Type type, object o, int position)
         {
             string value = o.ToString();
             if (!SmartReferenceExists(value))
@@ -55,7 +55,7 @@ namespace XSerializer
                 return $"'`{SameObject(value, false)}'";
             }
         }
-        protected string StringBlock(Type type, object o)
+        protected string StringBlock(Type type, object o, int position)
         {
             string value = (string)o;
             if (string.IsNullOrEmpty(value)) return null;
@@ -71,7 +71,7 @@ namespace XSerializer
                 return $"'`{SameObject(value, false)}'";
             }
         }
-        protected string KeyPairBlock(Type type, object o)
+        protected string KeyPairBlock(Type type, object o, int position)
         {
             if (!ReferenceExists(o))
             {
@@ -86,7 +86,7 @@ namespace XSerializer
                 return $"\"`{SameObject(o, false)}\"";
             }
         }
-        protected string CollectionBlock(Type type, object o)
+        protected string CollectionBlock(Type type, object o, int position)
         {
             if (!ReferenceExists(o))
             {
@@ -114,7 +114,7 @@ namespace XSerializer
                 return $"\"`{SameObject(o, true)}\"";
             }
         }
-        protected string ComplexBlock(Type type, object o)
+        protected string ComplexBlock(Type type, object o, int position)
         {
             if (!ReferenceExists(o))
             {
@@ -137,7 +137,7 @@ namespace XSerializer
             }
         }
 
-        internal string Build(object o)
+        internal string Build(object o, int position)
         {
             Type type = o.GetType();
             if (IsBoolType(type))
@@ -146,31 +146,31 @@ namespace XSerializer
             }
             else if (IsNumberType(type))
             {
-                return NumberBlock(type, o);
+                return NumberBlock(type, o, position);
             }
             else if (IsStringType(type))
             {
-                return StringBlock(type, o);
+                return StringBlock(type, o, position);
             }
             else if (IsEnumType(type))
             {
-                return EnumBlock(type, o);
+                return EnumBlock(type, o, position);
             }
             else if (IsDateTimeType(type))
             {
-                return DateTimeBlock(type, o);
+                return DateTimeBlock(type, o, position);
             }
             else if (IsKeyPairType(type))
             {
-                return KeyPairBlock(type, o);
+                return KeyPairBlock(type, o, position);
             }
             else if (IsCollectionType(type))
             {
-                return CollectionBlock(type, o);
+                return CollectionBlock(type, o, position);
             }
             else //Complex Object
             {
-                return ComplexBlock(type, o);
+                return ComplexBlock(type, o, position);
             }
         }
 
