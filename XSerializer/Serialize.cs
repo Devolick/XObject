@@ -79,6 +79,7 @@ namespace XObjectSerializer
         {
             if (!ReferenceExists(o))
             {
+                (o as IXObject)?.XSerialize(o);
                 PropertyInfo k = type.GetProperty("Key");
                 PropertyInfo v = type.GetProperty("Value");
                 string value = $"\"0{Build(k.PropertyType, k.GetValue(o))}1{Build(v.PropertyType, v.GetValue(o))}\"";
@@ -94,6 +95,7 @@ namespace XObjectSerializer
         {
             if (!ReferenceExists(o))
             {
+                (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder();
                 uint count = 0;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
@@ -123,6 +125,7 @@ namespace XObjectSerializer
         {
             if (!ReferenceExists(o))
             {
+                (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder();
                 uint count = 0;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
@@ -152,7 +155,7 @@ namespace XObjectSerializer
         }
         protected string DBNullBlock(Type type, object o)
         {
-            return null;
+            return string.Empty;
         }
 
         internal string Build(Type type, object o)

@@ -32,6 +32,7 @@ namespace XObjectSerializer
             {
                 var value = CollectionBuilder(type, x);
                 AddReference(value);
+                (value as IXObject)?.XDeserialize(value);
                 return value;
             }
         }
@@ -45,6 +46,7 @@ namespace XObjectSerializer
             {
                 var value = ComplexBuilder(type, x);
                 AddReference(value);
+                (value as IXObject)?.XDeserialize(value);
                 return value;
             }
         }
@@ -93,6 +95,7 @@ namespace XObjectSerializer
             {
                 var value = KeyPairBuilder(type, x);
                 AddReference(value);
+                (value as IXObject)?.XDeserialize(value);
                 return value;
             }
         }
@@ -134,7 +137,7 @@ namespace XObjectSerializer
         }
         protected object DBNullBlock(Type type, string x)
         {
-            return null;
+            return string.Empty;
         }
 
         internal object Build(Type type, string x)
