@@ -16,6 +16,76 @@ namespace XSerializer
             string value = ((bool)o ? 1 : 0).ToString();
             return $"'{value}'";
         }
+        protected string DateTimeBlock(Type type, object o)
+        {
+            string value = AddProtect($"'{((DateTime)o).ToString("yyyy-MM-dd HH:mm:ss")}'");
+            if (!SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
+        }
+        protected string EnumBlock(Type type, object o)
+        {
+            string value = ((int)o).ToString();
+            if (!SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
+        }
+        protected string NumberBlock(Type type, object o)
+        {
+            string value = o.ToString();
+            if (!SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
+        }
+        protected string StringBlock(Type type, object o)
+        {
+            string value = (string)o;
+            if (string.IsNullOrEmpty(value)) return null;
+
+            value = AddProtect(value);
+            if (!SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
+        }
+        protected string KeyPairBlock(Type type, object o)
+        {
+            if (!ReferenceExists(o))
+            {
+                PropertyInfo k = type.GetProperty("Key");
+                PropertyInfo v = type.GetProperty("Value");
+                string value = $"\"0{Build(k.GetValue(o))}1{Build(v.GetValue(o))}\"";
+                AddReference(o);
+                return value;
+            }
+            else
+            {
+                return $"\"`{SameObject(o, false)}\"";
+            }
+        }
         protected string CollectionBlock(Type type, object o)
         {
             if (!ReferenceExists(o))
@@ -64,76 +134,6 @@ namespace XSerializer
             else
             {
                 return $"\"`{SameObject(o, true)}\"";
-            }
-        }
-        protected string DateTimeBlock(Type type, object o)
-        {
-            string value = AddProtect($"'{((DateTime)o).ToString("yyyy-MM-dd HH:mm:ss")}'");
-            if (!SmartReferenceExists(value))
-            {
-                AddSmartReference(value);
-                return $"'{value}'";
-            }
-            else
-            {
-                return $"'`{SameObject(value, false)}'";
-            }
-        }
-        protected string EnumBlock(Type type, object o)
-        {
-            string value = ((int)o).ToString();
-            if (!SmartReferenceExists(value))
-            {
-                AddSmartReference(value);
-                return $"'{value}'";
-            }
-            else
-            {
-                return $"'`{SameObject(value, false)}'";
-            }
-        }
-        protected string KeyPairBlock(Type type, object o)
-        {
-            if (!ReferenceExists(o))
-            {
-                PropertyInfo k = type.GetProperty("Key");
-                PropertyInfo v = type.GetProperty("Value");
-                string value = $"\"0{Build(k.GetValue(o))}1{Build(v.GetValue(o))}\"";
-                AddReference(o);
-                return value;
-            }
-            else
-            {
-                return $"\"`{SameObject(o, false)}\"";
-            }
-        }
-        protected string NumberBlock(Type type, object o)
-        {
-            string value = o.ToString();
-            if (!SmartReferenceExists(value))
-            {
-                AddSmartReference(value);
-                return $"'{value}'";
-            }
-            else
-            {
-                return $"'`{SameObject(value, false)}'";
-            }
-        }
-        protected string StringBlock(Type type, object o)
-        {
-            string value = (string)o;
-            if (string.IsNullOrEmpty(value)) return null;
-
-            value = AddProtect(value);
-            if (!SmartReferenceExists(value))
-            {
-                AddSmartReference(value);
-                return $"'{value}'";
-            }
-            else
-            {
-                return $"'`{SameObject(value, false)}'";
             }
         }
 

@@ -17,14 +17,7 @@ namespace XSerializer
 
         protected object BooleanBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT))
-            {
-                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1))).ToString() == "1", Type.GetTypeCode(type));
-            }
-            else
-            {
-                return Convert.ChangeType(x == "1", Type.GetTypeCode(type));
-            }
+            return Convert.ChangeType(x == "1", Type.GetTypeCode(type));
         }
         protected object CollectionBlock(Type type, string x)
         {

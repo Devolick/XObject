@@ -4,7 +4,7 @@ using System.Text;
 
 namespace XSerializer.Tests
 {
-    public class SortedLists: ColletionHelper
+    public class SortedLists : ColletionHelper
     {
         public SortedList<bool, bool> Bools { get; set; }
         public SortedList<char, char> Chars { get; set; }
@@ -37,9 +37,10 @@ namespace XSerializer.Tests
             Decimals = Adds<Decimal>(size);
             Strings = Adds<string>(size);
         }
-        private SortedList<T,T> Adds<T>(int size) {
+        private SortedList<T, T> Adds<T>(int size)
+        {
             size = CutSize<T>(size);
-            SortedList<T,T> list = new SortedList<T,T>(size);
+            SortedList<T, T> list = new SortedList<T, T>(size);
             for (int i = 0; i < size; i++)
             {
                 list.Add(ForSameKey<T>(i), ForSameKey<T>(i));

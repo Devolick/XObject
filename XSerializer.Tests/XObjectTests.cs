@@ -139,17 +139,6 @@ namespace XSerializer.Tests
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
-        public void XObjectBlockingCollections()
-        {
-            BlockingCollections example = new BlockingCollections(1000);
-            string serialize = XObject.XSerialize<BlockingCollections>(example);
-            Console.WriteLine($"new BlockingCollections(1000) Serialize:\n{serialize}");
-            BlockingCollections deserializeObj = XObject.XDeserialize<BlockingCollections>(serialize);
-            string deserialize = XObject.XSerialize<BlockingCollections>(deserializeObj);
-            Console.WriteLine($"new BlockingCollections(1000) Deserialize:\n{deserialize}");
-            Assert.IsTrue(deserialize.Length == serialize.Length);
-        }
-        [TestMethod]
         public void XObjectConcurrentBags()
         {
             ConcurrentBags example = new ConcurrentBags(1000);
