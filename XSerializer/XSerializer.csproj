@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>The purpose of the mechanism is to maximize data compression for a complex object.</Description>
+    <Authors>Dzmitry Dym</Authors>
+  </PropertyGroup>
+
+</Project>
