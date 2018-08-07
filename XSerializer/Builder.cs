@@ -11,11 +11,12 @@ namespace XSerializer
 {
     internal abstract class Builder : IDisposable
     {
-        private IDictionary<int, object> references;
+        private IList<object> references;
         private bool ignoreRootReference;
 
-        internal Builder() {
-            references = new Dictionary<int, object>(128);
+        internal Builder()
+        {
+            references = new List<object>(128);
             ignoreRootReference = true;
         }
 
@@ -76,66 +77,56 @@ namespace XSerializer
         {
             return Type.GetTypeCode(type) == TypeCode.DBNull;
         }
-        protected bool IsEnumerableType(Type type)
+        protected bool IsCollectionType(Type type)
         {
             return typeof(IEnumerable).IsAssignableFrom(type);
         }
 
-        protected bool AddReference(object o, out int index)
-        {
-            index = -1;
-            if (ignoreRootReference) { ignoreRootReference = false; return true; };
-            if (!references.Any(a => a.Equals(o)))
-            {
-                references.Add(references.Count,o);
-                index = references.Count - 1;
-                return true;
-            }
-            return false;
-        }
-        protected bool AddReference(object o)
+        protected bool ReferenceExists(object o)
         {
             if (ignoreRootReference) { ignoreRootReference = false; return true; };
             if (!references.Any(a => a.Equals(o)))
             {
-                references.Add(references.Count, o);
                 return true;
             }
             return false;
         }
-        protected bool AddSmartReference(object o, int length, out int index)
+        protected bool SmartReferenceExists(object o)
         {
-            index = -1;
             if (ignoreRootReference) { ignoreRootReference = false; return true; };
+            string value = o.ToString();
             if (Math.Floor(Math.Log10(references.Count) + 1) >
-                Math.Floor(Math.Log10(length) + 1) + 8) return true;
-            if (!references.Any(a => a.Equals(o)))
+                Math.Floor(Math.Log10(value.Length) + 1)) return true;
+
+            if (!references.Any(a => {
+                if ((a as string) != null)
+                {
+                    return (string)a == value;
+                }
+                return false;
+            }))
             {
-                references.Add(references.Count, o);
-                index = references.Count - 1;
                 return true;
             }
             return false;
         }
-        protected void PassReference(int id, object o)
+        protected void AddReference(object o)
         {
-            references.Add(id, o);
+            references.Add(o);
         }
-        protected object FindReference(int id)
+        protected void AddSmartReference(string o)
+        {
+            references.Add(o);
+        }
+        protected object GetReference(int id)
         {
             return references[id];
         }
-        protected int SameReference(object o, bool referenceType)
+        protected int SameObject(object o, bool referenceType)
         {
             if(referenceType)
             {
-                int indexOf = -1;
-                foreach (var item in references)
-                {
-                    ++indexOf;
-                    if (item.Key.Equals(o)) return indexOf;
-                }
-                return indexOf;
+                return references.IndexOf(o);
             }
             else
             {
@@ -143,7 +134,7 @@ namespace XSerializer
                 string str = o as string;
                 references.First((f) => {
                     ++index;
-                    string s = f.Value as string;
+                    string s = f as string;
                     if (str == s)
                         return true;
                     return false;

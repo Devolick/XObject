@@ -7,20 +7,20 @@ namespace XSerializer
 {
     internal static class Queries
     {
-        internal const string OBJ = @"([0-9]+|[A-Z])((([`[0-9]+)?"")((([0-9]+|[A-Z]))(?:('(?:''|[^'])+')|(""(?:""""|[^""])+""))){1,}"")";
+        internal const string OBJ = @"([0-9]+|[A-Z])(""((([0-9]+|[A-Z]))(?:(('(?:''|[^'])+'))|((""(?:""""|[^""])+"")))|(`[0-9]+)){1,}"")";
         //internal const string OBJ = @"((([0-9]+|[A-Z])""((([0-9]+|[A-Z])(?:('(?:''|[^'])+')|(""(?:""""|[^""])+"")))){1,}"")|(([0-9]+|[A-Z])""`[0-9]+"")|(([0-9]+|[A-Z])"".+?""))";
         internal const string VAL = @"[0-9A-Z]+'(?:''|[^'])+'";
-        internal const string HEAD = @"(?<=@"").+(?="")";
+        //internal const string HEAD = @"(?<=@"").+(?="")";
         internal const string BODY = @"(?<=&"").+(?="")";
-        internal const string PRFO = @"^{0}""";
-        internal const string PRFV = @"^{0}'";
+        internal const string PRFO = @"^{0}[""]";
+        internal const string PRFV = @"^{0}[']";
         internal const string CENO = @"(?<="").+(?=""$)";
         internal const string CENV = @"(?<=').+(?='$)";
         internal const string ANY = @"^{0}[""']";
         internal const string IPNT = @"^`[0-9]";
-        internal const string OPNT = @"^[0-9]`[0-9]+[""']";
-        internal const string OPNTV = @"((?<=`)[0-9]+?(?=[""'])){1}";
-        internal const string OPNTVV = @"(?<=[""']).+(?=[""']$)";
+        //internal const string OPNT = @"^[0-9]`[0-9]+[""']";
+        //internal const string OPNTV = @"((?<=`)[0-9]+?(?=[""'])){1}";
+        //internal const string OPNTVV = @"(?<=[""']).+(?=[""']$)";
 
         internal static string[] RSTRINGS = new string[3] { "`", "'", "\"" };
 

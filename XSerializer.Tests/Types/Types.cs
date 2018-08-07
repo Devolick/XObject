@@ -19,21 +19,23 @@ namespace XSerializer.Tests
         public Single Single { get; set; }
         public Decimal Decimal { get; set; }
         public string String { get; set; }
+        //public Nullable<int> NullInt { get; set; }
 
         public Types() {
             Bool = true;
             Char = 'A';
             SByte = 15;
             UInt16 = 10;
-            UInt32 = 10;
-            UInt64 = 10;
-            Int16 = 10;
-            Int32 = 10;
-            Int64 = 10;
-            Double = 10;
-            Single = 10;
-            Decimal = 10;
+            UInt32 = 11;
+            UInt64 = 12;
+            Int16 = 13;
+            Int32 = 14;
+            Int64 = 15;
+            Double = 16;
+            Single = 17;
+            Decimal = 18;
             String = "say hello";
+            //NullInt = 1234;
         }
     }
 }

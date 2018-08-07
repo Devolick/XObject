@@ -8,142 +8,159 @@ namespace XSerializer
 {
     internal class Serialize<TObject> : Builder
     {
-
         internal Serialize()
             : base() { }
+
+        protected string BooleanBlock(Type type,object o)
+        {
+            string value = ((bool)o ? 1 : 0).ToString();
+            return $"'{value}'";
+        }
+        protected string CollectionBlock(Type type, object o)
+        {
+            if (ReferenceExists(o))
+            {
+                StringBuilder complex = new StringBuilder();
+                uint count = 0;
+                foreach (object op in EachHelper.EachValues(o))
+                {
+                    complex.Append($"{count++}{Build(op)}");
+                }
+                foreach (object item in (o as IEnumerable))
+                {
+                    complex.Append($"I{Build(item)}");
+                }
+                AddReference(o);
+                return $"\"{complex}\"";
+            }
+            else
+            {
+                return $"\"`{SameObject(o, true)}\"";
+            }
+        }
+        protected string ComplexBlock(Type type, object o)
+        {
+            if (ReferenceExists(o))
+            {
+                StringBuilder complex = new StringBuilder();
+                uint count = 0;
+                foreach (object op in EachHelper.EachValues(o))
+                {
+                    string value = Build(op);
+                    complex.Append($"{count++}{}");
+                }
+                AddReference(o);
+                return $"\"{complex}\"";
+            }
+            else
+            {
+                return $"\"`{SameObject(o, true)}\"";
+            }
+        }
+        protected string DateTimeBlock(Type type, object o)
+        {
+            string value = AddProtect($"'{((DateTime)o).ToString("yyyy-MM-dd HH:mm:ss")}'");
+            if (SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
+        }
+        protected string EnumBlock(Type type, object o)
+        {
+            string value = AddProtect(((int)o).ToString());
+            if (SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
+        }
+        protected string KeyPairBlock(Type type, object o)
+        {
+            if (ReferenceExists(o))
+            {
+                PropertyInfo k = type.GetProperty("Key");
+                PropertyInfo v = type.GetProperty("Value");
+                string value = $"\"0{Build(k.GetValue(o))}1{Build(v.GetValue(o))}\"";
+                AddReference(o);
+                return value;
+            }
+            else
+            {
+                return $"\"`{SameObject(o, false)}\"";
+            }
+        }
+        protected string NumberBlock(Type type, object o)
+        {
+            string value = AddProtect(o.ToString());
+            if (SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
+        }
+        protected string StringBlock(Type type, object o)
+        {
+            string value = AddProtect((string)o);
+            if (SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
+        }
 
         internal string Build(object o)
         {
             Type type = o.GetType();
             if (IsBoolType(type))
             {
-                string value = ((bool)o ? 1 : 0).ToString();
-                int index;
-                if (AddSmartReference(value, value.Length, out index))
-                {
-                    return index > -1 ? $"`{index}'{value}'" : $"'{value}'";
-                }
-                else
-                {
-                    return $"'`{SameReference(value, false)}'";
-                }
+                return BooleanBlock(type, o);
             }
             else if (IsNumberType(type))
             {
-                string value = AddProtect(o.ToString());
-                int index;
-                if (AddSmartReference(value, value.Length, out index))
-                {
-                    return index > -1 ? $"`{index}'{value}'" : $"'{value}'";
-                }
-                else
-                {
-                    return $"'`{SameReference(value,false)}'";
-                }
+                return NumberBlock(type, o);
             }
             else if (IsStringType(type))
             {
-                string value = AddProtect((string)o);
-                int index;
-                if (AddSmartReference(value, value.Length, out index))
-                {
-                    return index > -1 ? $"`{index}'{value}'" : $"'{value}'";
-                }
-                else
-                {
-                    return $"'`{SameReference(value, false)}'";
-                }
+                return StringBlock(type, o);
             }
             else if (IsEnumType(type))
             {
-                string value = AddProtect(((int)o).ToString());
-                int index;
-                if (AddSmartReference(value, value.Length, out index))
-                {
-                    return index > -1 ? $"`{index}'{value}'" : $"'{value}'";
-                }
-                else
-                {
-                    return $"'`{SameReference(value, false)}'";
-                }
+                return EnumBlock(type, o);
             }
             else if (IsDateTimeType(type))
             {
-                int index;
-                string value = AddProtect($"'{((DateTime)o).ToString("yyyy-MM-dd HH:mm:ss")}'");
-                if (AddSmartReference(value, value.Length, out index))
-                {
-                    return index > -1 ? $"`{index}'{value}'" : $"'{value}'";
-                }
-                else
-                {
-                    return $"'`{SameReference(value, false)}'";
-                }
+                return DateTimeBlock(type, o);
             }
             else if (IsKeyPairType(type))
             {
-                int index;
-                if (AddReference(o, out index))
-                {
-                    PropertyInfo key = type.GetProperty("Key");
-                    PropertyInfo value = type.GetProperty("Value");
-                    return index > -1 ? 
-                        $"`{index}\"0{Build(key.GetValue(o))}1{Build(value.GetValue(o))}\"" :
-                        $"\"0{Build(key.GetValue(o))}1{Build(value.GetValue(o))}\"";
-                }
-                else
-                {
-                    return $"\"`{SameReference(o, false)}\"";
-                }
+                return KeyPairBlock(type, o);
             }
-            //else if (IsDBNullType(type))
-            //{
-
-            //}
-            //else if (IsNullableType(type))
-            //{
-
-            //}
-            else if (IsEnumerableType(type))
+            else if (IsCollectionType(type))
             {
-                int index;
-                if (AddReference(o, out index))
-                {
-                    StringBuilder complex = new StringBuilder();
-                    uint count = 0;
-                    foreach (object op in EachHelper.EachValues(o))
-                    {
-                        complex.Append($"{count++}{Build(op)}");
-                    }
-                    foreach (object item in (o as IEnumerable))
-                    {
-                        complex.Append($"I{Build(item)}");
-                    }
-                    return index > -1 ? $"`{index}\"{complex}\"" : $"\"{complex}\"";
-                }
-                else
-                {
-                    return $"\"`{SameReference(o, true)}\"";
-                }
+                return CollectionBlock(type, o);
             }
             else //Complex Object
             {
-                int index;
-                if (AddReference(o, out index))
-                {
-                    StringBuilder complex = new StringBuilder();
-                    uint count = 0;
-                    foreach (object op in EachHelper.EachValues(o))
-                    {
-                        complex.Append($"{count++}{Build(op)}");
-                    }
-                    return index > -1 ? $"`{index}\"{complex}\"" : $"\"{complex}\"";
-                }
-                else
-                {
-                    return $"\"`{SameReference(o, true)}\"";
-                }
+                return ComplexBlock(type, o);
             }
         }
+
     }
 }
