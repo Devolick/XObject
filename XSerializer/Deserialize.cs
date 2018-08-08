@@ -197,16 +197,17 @@ namespace XObjectSerializer
         private object ComplexBuilder(Type type, string x)
         {
             object o = Activator.CreateInstance(type);
-            int count = 0;
             Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
             MatchCollection matches = rx.Matches(x);
 
+            int count = -1;
             foreach (PropertyInfo pi in EachHelper.EachProps(o))
             {
+                ++count;
                 if (matches.Count <= count) break;
                 string value = matches[count].Value;
+                if (!Regex.IsMatch(value, string.Format(Queries.PRF, count), RegexOptions.Compiled)) continue;
                 pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENT, RegexOptions.Compiled).Value));
-                ++count;
             }
             return o;
         }
@@ -217,13 +218,14 @@ namespace XObjectSerializer
             string anyQ = string.Format(Queries.ANY, "I");
             IEnumerable<string> collectionItems = matches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled));
             ProxyCollection proxyCollection = new ProxyCollection(type, collectionItems.Count());
-            int count = 0;
+            int count = -1;
             foreach (PropertyInfo pi in EachHelper.EachProps(proxyCollection.Collection))
             {
+                ++count;
                 if (matches.Count <= count) break;
                 string value = matches[count].Value;
+                if (!Regex.IsMatch(value, string.Format(Queries.PRF, count), RegexOptions.Compiled)) continue;
                 pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENT, RegexOptions.Compiled).Value));
-                ++count;
             }
             foreach (string item in collectionItems)
             {
@@ -241,7 +243,6 @@ namespace XObjectSerializer
             ConstructorInfo ctorKeyValue = type.GetConstructor(new[] { key.PropertyType, value.PropertyType });
             Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
             MatchCollection matches = rx.Matches(x);
-            int count = 0;
             foreach (Match m in matches)
             {
                 if (Regex.IsMatch(m.Value,string.Format(Queries.PRF,0)))
@@ -252,7 +253,6 @@ namespace XObjectSerializer
                 {
                     valueResult = Build(value.PropertyType, Regex.Match(m.Value, Queries.CENT, RegexOptions.Compiled).Value);
                 }
-                ++count;
             }
             return ctorKeyValue.Invoke(new object[] { keyResult, valueResult });
         }

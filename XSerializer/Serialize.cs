@@ -98,9 +98,10 @@ namespace XObjectSerializer
             {
                 (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder(128);
-                uint count = 0;
+                int count = 0;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
+                    ++count;
                     object piValue = pi.GetValue(o);
                     if (piValue == null) {
                         continue;
@@ -110,7 +111,6 @@ namespace XObjectSerializer
                     {
                         complex.Append($"{count}{value}");
                     }
-                    ++count;
                 }
                 foreach (object item in (o as IEnumerable))
                 {
@@ -133,9 +133,10 @@ namespace XObjectSerializer
             {
                 (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder(128);
-                uint count = 0;
+                int count = 0;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
+                    ++count;
                     object piValue = pi.GetValue(o);
                     if (piValue == null)
                     {
@@ -146,7 +147,6 @@ namespace XObjectSerializer
                     {
                         complex.Append($"{count}{value}");
                     }
-                    ++count;
                 }
                 AddReference(o);
                 return $"\"{complex}\"";

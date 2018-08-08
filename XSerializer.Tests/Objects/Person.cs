@@ -16,6 +16,7 @@ namespace XObjectSerializer.Tests
     }
     public class Person
     {
+        public Person Schizophrenia { get; set; } // null
         public PersonInfo Info { get; set; }
         public string Secret { get; set; }
         public string Empty { get; set; }
