@@ -119,8 +119,8 @@ namespace XObjectSerializer
         public static TClone Clone<TClone>(TClone o)
         {
             if (o == null) throw new XObjectException("It is not permissible to clone a null reference.");
-            string serialize = new Serialize().Build(o.GetType(), o);
-            return (TClone)new Deserialize().Build(typeof(TClone), serialize);
+            string serialize = XObject.XSerialize(o);
+            return XObject.XDeserialize<TClone>(serialize);
         }
     }
 }
