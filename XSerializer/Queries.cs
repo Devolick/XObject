@@ -11,10 +11,8 @@ namespace XObjectSerializer
         internal const string VAL = @"[0-9A-Z]+'(?:''|[^'])+'";
         internal const string BODY = @"(?<=&[""']).+(?=[""'])";
         internal const string BODYVALID = @"^&(""((`[0-9]+)|(([0-9]+|[A-Z]))(?:('(''|[^'])+')|(""(?:(?=[0-9]+|\0)|[^""])+""))){1,}"")$";
-        internal const string PRFO = @"^{0}[""]";
-        internal const string PRFV = @"^{0}[']";
-        internal const string CENO = @"(?<="").+(?=""$)";
-        internal const string CENV = @"(?<=').+(?='$)";
+        internal const string PRF = @"^{0}[""']";
+        internal const string CENT = @"((?<=[""']).+(?=[""']$))";
         internal const string ANY = @"^{0}[""']";
         internal const string IPNT = @"^`[0-9]";
 

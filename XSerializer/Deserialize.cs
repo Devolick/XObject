@@ -137,7 +137,7 @@ namespace XObjectSerializer
         }
         protected object DBNullBlock(Type type, string x)
         {
-            return string.Empty;
+            return DBNull.Value;
         }
 
         internal object Build(Type type, string x)
@@ -198,83 +198,36 @@ namespace XObjectSerializer
         {
             object o = Activator.CreateInstance(type);
             int count = 0;
-            Regex objRx = new Regex(Queries.OBJ, RegexOptions.Compiled);
-            Regex valRx = new Regex(Queries.VAL, RegexOptions.Compiled);
-            MatchCollection objMatches = objRx.Matches(x);
-            MatchCollection valMatches = valRx.Matches(objRx.Replace(x, string.Empty));
+            Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
+            MatchCollection matches = rx.Matches(x);
 
             foreach (PropertyInfo pi in EachHelper.EachProps(o))
             {
-                string form = string.Format(Queries.PRFO, count);
-                if (objMatches.Any(a => Regex.IsMatch(a, form, RegexOptions.Compiled)))
-                {
-                    string value = objMatches.First(f => Regex.IsMatch(f, form, RegexOptions.Compiled));
-                    if (string.IsNullOrEmpty(value)) continue;
-                    pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENO, RegexOptions.Compiled).Value));
-                }
-                else
-                {
-                    string value = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, count), RegexOptions.Compiled));
-                    if (string.IsNullOrEmpty(value)) continue;
-                    pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENV, RegexOptions.Compiled).Value));
-                }
+                if (matches.Count <= count) break;
+                string value = matches[count].Value;
+                pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENT, RegexOptions.Compiled).Value));
                 ++count;
             }
             return o;
         }
         private object CollectionBuilder(Type type, string x)
         {
-            int count = 0;
-            Regex objRx = new Regex(Queries.OBJ, RegexOptions.Compiled);
-            Regex valRx = new Regex(Queries.VAL, RegexOptions.Compiled);
-            MatchCollection objMatches = objRx.Matches(x);
-            MatchCollection valMatches = valRx.Matches(objRx.Replace(x, string.Empty));
-            bool objectItems = false;
+            Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
+            MatchCollection matches = rx.Matches(x);
             string anyQ = string.Format(Queries.ANY, "I");
-            ProxyCollection proxyCollection = null;
-            if (objMatches.Any(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled)))
-            {
-                objectItems = true;
-                proxyCollection = new ProxyCollection(type, objMatches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled)).Count());
-            }
-            else if (valMatches.Any(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled)))
-            {
-                objectItems = false;
-                proxyCollection = new ProxyCollection(type, valMatches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled)).Count());
-            }
-
+            IEnumerable<string> collectionItems = matches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled));
+            ProxyCollection proxyCollection = new ProxyCollection(type, collectionItems.Count());
+            int count = 0;
             foreach (PropertyInfo pi in EachHelper.EachProps(proxyCollection.Collection))
             {
-                string form = string.Format(Queries.PRFO, count);
-                if (objMatches.Any(a => Regex.IsMatch(a, form, RegexOptions.Compiled)))
-                {
-                    string value = objMatches.First(f => Regex.IsMatch(f, form, RegexOptions.Compiled));
-                    if (string.IsNullOrEmpty(value)) continue;
-                    pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENO, RegexOptions.Compiled).Value));
-                }
-                else
-                {
-                    string value = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, count), RegexOptions.Compiled));
-                    if (string.IsNullOrEmpty(value)) continue;
-                    pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENV, RegexOptions.Compiled).Value));
-                }
+                if (matches.Count <= count) break;
+                string value = matches[count].Value;
+                pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENT, RegexOptions.Compiled).Value));
                 ++count;
             }
-            if (objectItems)
+            foreach (string item in collectionItems)
             {
-                foreach (string item in objMatches.Where(w => Regex.IsMatch(w, anyQ, RegexOptions.Compiled)))
-                {
-                    if (string.IsNullOrEmpty(item)) continue;
-                    proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.CENO, RegexOptions.Compiled).Value));
-                }
-            }
-            else
-            {
-                foreach (string item in valMatches.Where(w => Regex.IsMatch(w, anyQ, RegexOptions.Compiled)))
-                {
-                    if (string.IsNullOrEmpty(item)) continue;
-                    proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.CENV, RegexOptions.Compiled).Value));
-                }
+                proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.CENT, RegexOptions.Compiled).Value));
             }
             proxyCollection.CreateProxy();
             return proxyCollection.Collection;
@@ -286,37 +239,20 @@ namespace XObjectSerializer
             object keyResult = null;
             object valueResult = null;
             ConstructorInfo ctorKeyValue = type.GetConstructor(new[] { key.PropertyType, value.PropertyType });
-            Regex objRx = new Regex(Queries.OBJ, RegexOptions.Compiled);
-            Regex valRx = new Regex(Queries.VAL, RegexOptions.Compiled);
-            MatchCollection objMatches = objRx.Matches(x);
-            MatchCollection valMatches = valRx.Matches(objRx.Replace(x, string.Empty));
-            for (int i = 0; i < 2; i++)
+            Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
+            MatchCollection matches = rx.Matches(x);
+            int count = 0;
+            foreach (Match m in matches)
             {
-                string form = string.Format(Queries.PRFO, i);
-                if (objMatches.Any(a => Regex.IsMatch(a, form, RegexOptions.Compiled)))
+                if (Regex.IsMatch(m.Value,string.Format(Queries.PRF,0)))
                 {
-                    string v = objMatches.First(f => Regex.IsMatch(f, form, RegexOptions.Compiled));
-                    if (i == 0)
-                    {
-                        keyResult = Build(key.PropertyType, Regex.Match(v, Queries.CENO, RegexOptions.Compiled).Value);
-                    }
-                    else
-                    {
-                        valueResult = Build(value.PropertyType, Regex.Match(v, Queries.CENO, RegexOptions.Compiled).Value);
-                    }
+                    keyResult = Build(key.PropertyType, Regex.Match(m.Value, Queries.CENT, RegexOptions.Compiled).Value);
                 }
                 else
                 {
-                    string v = valMatches.First(f => Regex.IsMatch(f, string.Format(Queries.PRFV, i, RegexOptions.Compiled)));
-                    if (i == 0)
-                    {
-                        keyResult = Build(key.PropertyType, Regex.Match(v, Queries.CENV, RegexOptions.Compiled).Value);
-                    }
-                    else
-                    {
-                        valueResult = Build(value.PropertyType, Regex.Match(v, Queries.CENV, RegexOptions.Compiled).Value);
-                    }
+                    valueResult = Build(value.PropertyType, Regex.Match(m.Value, Queries.CENT, RegexOptions.Compiled).Value);
                 }
+                ++count;
             }
             return ctorKeyValue.Invoke(new object[] { keyResult, valueResult });
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -96,15 +97,20 @@ namespace XObjectSerializer
             if (!ReferenceExists(o))
             {
                 (o as IXObject)?.XSerialize(o);
-                StringBuilder complex = new StringBuilder();
+                StringBuilder complex = new StringBuilder(128);
                 uint count = 0;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
                     object piValue = pi.GetValue(o);
-                    if (piValue == null) continue;
+                    if (piValue == null) {
+                        continue;
+                    }
                     string value = Build(pi.PropertyType, piValue);
-                    if (string.IsNullOrEmpty(value)) continue;
-                    complex.Append($"{count++}{value}");
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        complex.Append($"{count}{value}");
+                    }
+                    ++count;
                 }
                 foreach (object item in (o as IEnumerable))
                 {
@@ -126,16 +132,21 @@ namespace XObjectSerializer
             if (!ReferenceExists(o))
             {
                 (o as IXObject)?.XSerialize(o);
-                StringBuilder complex = new StringBuilder();
+                StringBuilder complex = new StringBuilder(128);
                 uint count = 0;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
                     object piValue = pi.GetValue(o);
-                    if (piValue == null) continue;
+                    if (piValue == null)
+                    {
+                        continue;
+                    }
                     string value = Build(pi.PropertyType, piValue);
-                    if (string.IsNullOrEmpty(value)) continue;
-
-                    complex.Append($"{count++}{value}");
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        complex.Append($"{count}{value}");
+                    }
+                    ++count;
                 }
                 AddReference(o);
                 return $"\"{complex}\"";

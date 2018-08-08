@@ -194,6 +194,7 @@ namespace XObjectSerializer
             return value;
         }
 
+
         public void Dispose()
         {
             

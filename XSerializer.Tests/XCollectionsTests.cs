@@ -17,10 +17,10 @@ namespace XObjectSerializer.Tests
         {
             Lists example = new Lists(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new Lists(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Lists deserializeObj = XObject.XDeserialize<Lists>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Lists(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
@@ -29,10 +29,10 @@ namespace XObjectSerializer.Tests
         {
             Dictionaries example = new Dictionaries(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new Dictionaries(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Dictionaries deserializeObj = XObject.XDeserialize<Dictionaries>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new Dictionaries(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -40,10 +40,10 @@ namespace XObjectSerializer.Tests
         {
             LinkedLists example = new LinkedLists(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new LinkedLists(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             LinkedLists deserializeObj = XObject.XDeserialize<LinkedLists>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new LinkedLists(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -51,10 +51,10 @@ namespace XObjectSerializer.Tests
         {
             Queues example = new Queues(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new Queues(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Queues deserializeObj = XObject.XDeserialize<Queues>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new Queues(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -62,10 +62,10 @@ namespace XObjectSerializer.Tests
         {
             SortedDictionaries example = new SortedDictionaries(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new SortedDictionaries(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             SortedDictionaries deserializeObj = XObject.XDeserialize<SortedDictionaries>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new SortedDictionaries(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -73,10 +73,10 @@ namespace XObjectSerializer.Tests
         {
             SortedLists example = new SortedLists(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new SortedLists(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             SortedLists deserializeObj = XObject.XDeserialize<SortedLists>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new SortedLists(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -84,10 +84,10 @@ namespace XObjectSerializer.Tests
         {
             SortedSets example = new SortedSets(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new SortedSets(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             SortedSets deserializeObj = XObject.XDeserialize<SortedSets>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new SortedSets(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"Deserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]

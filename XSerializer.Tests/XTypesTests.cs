@@ -17,7 +17,7 @@ namespace XObjectSerializer.Tests
         {
             Types types = new Types();
             string serialize = XObject.XSerialize(types);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Types deserializeObj = XObject.XDeserialize<Types>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
             Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
