@@ -98,7 +98,7 @@ namespace XObjectSerializer
             {
                 (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder(128);
-                int count = 0;
+                int count = -1;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
                     ++count;
@@ -133,7 +133,7 @@ namespace XObjectSerializer
             {
                 (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder(128);
-                int count = 0;
+                int count = -1;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
                     ++count;

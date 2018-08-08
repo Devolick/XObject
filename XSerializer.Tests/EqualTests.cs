@@ -43,7 +43,8 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            string serialize = XObject.XSerialize(valid);
+            Assert.IsTrue(serialize == test);
         }
         [TestMethod]
         public void InvalidByString()
