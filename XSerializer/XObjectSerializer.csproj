@@ -11,15 +11,25 @@
     <PackageIconUrl>https://raw.githubusercontent.com/Devolick/XObject/master/XSerializer/xobject_img.ico</PackageIconUrl>
     <RepositoryUrl>https://github.com/Devolick/XObject</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageTags>Serialize, Compress, Complex Object, Files, Strings, Text, Regex, Xml, Json, Custom, Types, List, Dictionary, Clone</PackageTags>
+    <PackageTags>Serialize, Compress, Complex Object, Files, Strings, Text, Regex, Xml, Json, Custom, Types, List, Dictionary, Clone, Cryptography</PackageTags>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Devolick/XObject/master/LICENSE</PackageLicenseUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>XObjectSerializer.pfx</AssemblyOriginatorKeyFile>
-    <Version>1.2.1</Version>
+    <Version>1.2.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard2.0\XObject.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Optimization\**" />
+    <EmbeddedResource Remove="Optimization\**" />
+    <None Remove="Optimization\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Strategy\Strong\" />
+  </ItemGroup>
 
 </Project>

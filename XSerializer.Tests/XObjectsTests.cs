@@ -17,10 +17,10 @@ namespace XObjectSerializer.Tests
         {
             Types types = new Types();
             string serialize = XObject.XSerialize(types);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Types deserializeObj = XObject.XDeserialize<Types>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -29,10 +29,10 @@ namespace XObjectSerializer.Tests
         {
             Person person = new Person();
             string serialize = XObject.XSerialize(person);
-            Console.WriteLine($"new Person() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Person deserializeObj = XObject.XDeserialize<Person>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Person() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }

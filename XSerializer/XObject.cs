@@ -2,6 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using XObjectSerializer.Exceptions;
+using XObjectSerializer.Helpers;
+using XObjectSerializer.Strategy.Weak;
 
 namespace XObjectSerializer
 {
@@ -21,7 +24,7 @@ namespace XObjectSerializer
 
             using(Serialize serialize = new Serialize())
             {
-                return $"&{serialize.Build(o.GetType(), o)}";
+                return serialize.Build(o.GetType(), o);
             }
         }
         /// <summary>
@@ -36,7 +39,7 @@ namespace XObjectSerializer
 
             using (Serialize serialize = new Serialize(dateFormat))
             {
-                return $"&{serialize.Build(o.GetType(), o)}";
+                return serialize.Build(o.GetType(), o);
             }
         }
         /// <summary>
@@ -52,7 +55,7 @@ namespace XObjectSerializer
 
             using (Serialize serialize = new Serialize(dateFormat, dateFormatProvider))
             {
-                return $"&{serialize.Build(o.GetType(), o)}";
+                return serialize.Build(o.GetType(), o);
             }
         }
         /// <summary>
@@ -109,7 +112,7 @@ namespace XObjectSerializer
         public static bool IsValid(string x)
         {
             if (string.IsNullOrEmpty(x)) throw new XObjectException("Invalid empty string.");
-            return Regex.IsMatch(x, Queries.BODYVALID,RegexOptions.Compiled);
+            return Regex.IsMatch(x, Queries.VALD,RegexOptions.Compiled);
         }
         /// <summary>
         /// Produces cloning of this object. You must follow the serialization rules.

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace XObjectSerializer
+namespace XObjectSerializer.Strategy.Code
 {
     internal class ProxyCollection
     {

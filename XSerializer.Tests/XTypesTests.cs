@@ -20,7 +20,7 @@ namespace XObjectSerializer.Tests
             Console.WriteLine($"Serialize:\n{serialize}");
             Types deserializeObj = XObject.XDeserialize<Types>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -28,10 +28,10 @@ namespace XObjectSerializer.Tests
         public void Bool()
         {
             string serialize = XObject.XSerialize(true);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             bool deserializeObj = XObject.XDeserialize<bool>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -39,10 +39,10 @@ namespace XObjectSerializer.Tests
         public void Char()
         {
             string serialize = XObject.XSerialize('A');
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Char deserializeObj = XObject.XDeserialize<Char>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -50,10 +50,10 @@ namespace XObjectSerializer.Tests
         public void Sbyte()
         {
             string serialize = XObject.XSerialize(111);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             sbyte deserializeObj = XObject.XDeserialize<sbyte>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -61,10 +61,10 @@ namespace XObjectSerializer.Tests
         public void UInt16()
         {
             string serialize = XObject.XSerialize(1234);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             UInt16 deserializeObj = XObject.XDeserialize<UInt16>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -72,10 +72,10 @@ namespace XObjectSerializer.Tests
         public void UInt32()
         {
             string serialize = XObject.XSerialize(1234);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             UInt32 deserializeObj = XObject.XDeserialize<UInt32>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -83,10 +83,10 @@ namespace XObjectSerializer.Tests
         public void UInt64()
         {
             string serialize = XObject.XSerialize(1234);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             UInt64 deserializeObj = XObject.XDeserialize<UInt64>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -94,10 +94,10 @@ namespace XObjectSerializer.Tests
         public void Int16()
         {
             string serialize = XObject.XSerialize(1234);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Int16 deserializeObj = XObject.XDeserialize<Int16>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -105,10 +105,10 @@ namespace XObjectSerializer.Tests
         public void Int32()
         {
             string serialize = XObject.XSerialize(1234);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Int32 deserializeObj = XObject.XDeserialize<Int32>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -116,10 +116,10 @@ namespace XObjectSerializer.Tests
         public void Int64()
         {
             string serialize = XObject.XSerialize(1234);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Int64 deserializeObj = XObject.XDeserialize<Int64>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -127,10 +127,10 @@ namespace XObjectSerializer.Tests
         public void Double()
         {
             string serialize = XObject.XSerialize(1234.123);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Double deserializeObj = XObject.XDeserialize<Double>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -138,10 +138,10 @@ namespace XObjectSerializer.Tests
         public void Single()
         {
             string serialize = XObject.XSerialize(1234);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Single deserializeObj = XObject.XDeserialize<Single>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -149,10 +149,10 @@ namespace XObjectSerializer.Tests
         public void Decimal()
         {
             string serialize = XObject.XSerialize(1234);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Decimal deserializeObj = XObject.XDeserialize<Decimal>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -160,10 +160,10 @@ namespace XObjectSerializer.Tests
         public void String()
         {
             string serialize = XObject.XSerialize("Hello Dzmitry!");
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             string deserializeObj = XObject.XDeserialize<string>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }
@@ -172,10 +172,10 @@ namespace XObjectSerializer.Tests
         {
             Nullable<int> n = 777;
             string serialize = XObject.XSerialize(n);
-            Console.WriteLine($"new Types() Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Nullable<int> deserializeObj = XObject.XDeserialize<Nullable<int>>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"\nnew Types() Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
         }

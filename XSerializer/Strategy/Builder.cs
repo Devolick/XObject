@@ -7,18 +7,21 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using XObjectSerializer.Helpers;
 
-namespace XObjectSerializer
+namespace XObjectSerializer.Strategy
 {
     internal abstract class Builder : IDisposable
     { 
         private IList<object> references;
+        protected int stringPointer;
         private bool ignoreRootReference;
         protected string dateFormat;
         protected IFormatProvider dateFormatProvider;
 
         internal Builder()
         {
+            stringPointer = 0;
             references = new List<object>(128);
             ignoreRootReference = true;
         }
@@ -142,10 +145,6 @@ namespace XObjectSerializer
                 return references[id];
             }
         }
-        internal object Clone(object o)
-        {
-            return XObject.Clone(o);
-        }
         protected int SameObject(object o, bool referenceType)
         {
             if(referenceType)
@@ -164,6 +163,15 @@ namespace XObjectSerializer
                     return false;
                 });
                 return index;
+            }
+        }
+        protected IEnumerable<string> EachStringReferences()
+        {
+            foreach (var item in references)
+            {
+                string value = (item as string);
+                if (!string.IsNullOrEmpty(value))
+                    yield return value;
             }
         }
 
@@ -194,6 +202,10 @@ namespace XObjectSerializer
             return value;
         }
 
+        internal object Clone(object o)
+        {
+            return XObject.Clone(o);
+        }
 
         public void Dispose()
         {

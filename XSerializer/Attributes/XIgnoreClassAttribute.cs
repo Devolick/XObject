@@ -7,30 +7,21 @@ namespace XObjectSerializer.Attributes
     /// <summary>
     /// Ignores serialization of class properties
     /// </summary>
-    public class XIgnoreClassAttribute
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    public class XIgnoreClassAttribute: Attribute
     {
-        private bool ignored;
         /// <summary>
         /// Property names to be ignored
         /// </summary>
-        public string[] Properties { get; set; }
+        public string[] Properties { get; private set; }
 
         private XIgnoreClassAttribute() { }
-        /// <summary>
-        /// The constructor in which you can specify ignoring the class
-        /// </summary>
-        /// <param name="ignore">Ignore this class</param>
-        public XIgnoreClassAttribute(bool ignore)
-        {
-            ignored = ignore;
-        }
         /// <summary>
         /// A constructor in which you can ignore class properties
         /// </summary>
         /// <param name="properties">Ignore properties by name</param>
         public XIgnoreClassAttribute(params string[] properties)
         {
-            ignored = false;
             Properties = properties;
         }
     }

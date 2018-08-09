@@ -4,17 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
+using XObjectSerializer.Attributes;
+using XObjectSerializer.Exceptions;
+using XObjectSerializer.Helpers;
+using XObjectSerializer.Interfaces;
 
-namespace XObjectSerializer
+namespace XObjectSerializer.Strategy.Weak
 {
     internal class Serialize : Builder
     {
         internal Serialize()
-        { }
+        {
+
+        }
         internal Serialize(string dateFormat)
-            : base(dateFormat) { }
+            : base(dateFormat) {
+
+        }
         internal Serialize(string dateFormat, IFormatProvider dateFormatProvider)
-            : base(dateFormat, dateFormatProvider) { }
+            : base(dateFormat, dateFormatProvider) {
+
+        }
 
         protected string BooleanBlock(Type type, object o)
         {
@@ -24,41 +35,17 @@ namespace XObjectSerializer
         protected string DateTimeBlock(Type type, object o)
         {
             string value = AddProtect($"{((DateTime)o).ToString(dateFormat, dateFormatProvider)}");
-            if (!SmartReferenceExists(value))
-            {
-                AddSmartReference(value);
-                return $"'{value}'";
-            }
-            else
-            {
-                return $"'`{SameObject(value, false)}'";
-            }
+            return $"'{value}'";
         }
         protected string EnumBlock(Type type, object o)
         {
             string value = ((int)o).ToString();
-            if (!SmartReferenceExists(value))
-            {
-                AddSmartReference(value);
-                return $"'{value}'";
-            }
-            else
-            {
-                return $"'`{SameObject(value, false)}'";
-            }
+            return $"'{value}'";
         }
         protected string NumberBlock(Type type, object o)
         {
             string value = o.ToString();
-            if (!SmartReferenceExists(value))
-            {
-                AddSmartReference(value);
-                return $"'{value}'";
-            }
-            else
-            {
-                return $"'`{SameObject(value, false)}'";
-            }
+            return $"'{value}'";
         }
         protected string StringBlock(Type type, object o)
         {
@@ -66,15 +53,7 @@ namespace XObjectSerializer
             if (string.IsNullOrEmpty(value)) return null;
 
             value = AddProtect(value);
-            if (!SmartReferenceExists(value))
-            {
-                AddSmartReference(value);
-                return $"'{value}'";
-            }
-            else
-            {
-                return $"'`{SameObject(value, false)}'";
-            }
+            return $"'{value}'";
         }
         protected string KeyPairBlock(Type type, object o)
         {
@@ -83,7 +62,7 @@ namespace XObjectSerializer
                 (o as IXObject)?.XSerialize(o);
                 PropertyInfo k = type.GetProperty("Key");
                 PropertyInfo v = type.GetProperty("Value");
-                string value = $"\"0{Build(k.PropertyType, k.GetValue(o))}1{Build(v.PropertyType, v.GetValue(o))}\"";
+                string value = $"\"0{BuildBlocks(k.PropertyType, k.GetValue(o))}1{BuildBlocks(v.PropertyType, v.GetValue(o))}\"";
                 AddReference(o);
                 return value;
             }
@@ -94,6 +73,8 @@ namespace XObjectSerializer
         }
         protected string CollectionBlock(Type type, object o)
         {
+            XIgnoreClassAttribute ignoreClass = type.GetCustomAttribute<XIgnoreClassAttribute>(false);
+
             if (!ReferenceExists(o))
             {
                 (o as IXObject)?.XSerialize(o);
@@ -103,10 +84,12 @@ namespace XObjectSerializer
                 {
                     ++count;
                     object piValue = pi.GetValue(o);
-                    if (piValue == null) {
+                    if (piValue == null ||
+                        pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
+                        (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name))) {
                         continue;
                     }
-                    string value = Build(pi.PropertyType, piValue);
+                    string value = BuildBlocks(pi.PropertyType, piValue);
                     if (!string.IsNullOrEmpty(value))
                     {
                         complex.Append($"{count}{value}");
@@ -115,7 +98,7 @@ namespace XObjectSerializer
                 foreach (object item in (o as IEnumerable))
                 {
                     if (item == null) continue;
-                    string value = Build(item.GetType(), item);
+                    string value = BuildBlocks(item.GetType(), item);
                     if (string.IsNullOrEmpty(value)) continue;
                     complex.Append($"I{value}");
                 }
@@ -129,6 +112,8 @@ namespace XObjectSerializer
         }
         protected string ComplexBlock(Type type, object o)
         {
+            XIgnoreClassAttribute ignoreClass = type.GetCustomAttribute<XIgnoreClassAttribute>(false);
+
             if (!ReferenceExists(o))
             {
                 (o as IXObject)?.XSerialize(o);
@@ -138,11 +123,13 @@ namespace XObjectSerializer
                 {
                     ++count;
                     object piValue = pi.GetValue(o);
-                    if (piValue == null)
+                    if (piValue == null ||
+                        pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
+                        (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name)))
                     {
                         continue;
                     }
-                    string value = Build(pi.PropertyType, piValue);
+                    string value = BuildBlocks(pi.PropertyType, piValue);
                     if (!string.IsNullOrEmpty(value))
                     {
                         complex.Append($"{count}{value}");
@@ -160,7 +147,7 @@ namespace XObjectSerializer
         {
             if (o != null)
             {
-                return Build(type.GetGenericArguments()[0], o);
+                return BuildBlocks(type.GetGenericArguments()[0], o);
             }
             return null;
         }
@@ -169,7 +156,7 @@ namespace XObjectSerializer
             return string.Empty;
         }
 
-        internal string Build(Type type, object o)
+        private string BuildBlocks(Type type, object o)
         {
             if (IsNullableType(type))
             {
@@ -222,6 +209,9 @@ namespace XObjectSerializer
                 catch (Exception ex) { throw new XObjectException("An error occurred while serializing Object type.", ex); }
             }
         }
-
+        internal string Build(Type type, object o)
+        {
+            return $"&{BuildBlocks(type, o)}";
+        }
     }
 }

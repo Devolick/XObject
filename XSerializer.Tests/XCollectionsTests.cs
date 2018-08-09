@@ -87,7 +87,7 @@ namespace XObjectSerializer.Tests
             Console.WriteLine($"Serialize:\n{serialize}");
             SortedSets deserializeObj = XObject.XDeserialize<SortedSets>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -95,10 +95,10 @@ namespace XObjectSerializer.Tests
         {
             Stacks example = new Stacks(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new Stacks(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             Stacks deserializeObj = XObject.XDeserialize<Stacks>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new Stacks(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -109,7 +109,7 @@ namespace XObjectSerializer.Tests
             Console.WriteLine($"new ConcurrentBags(32) Serialize:\n{serialize}");
             ConcurrentBags deserializeObj = XObject.XDeserialize<ConcurrentBags>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new ConcurrentBags(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -117,10 +117,10 @@ namespace XObjectSerializer.Tests
         {
             ConcurrentDictionaries example = new ConcurrentDictionaries(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new ConcurrentDictionaries(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             ConcurrentDictionaries deserializeObj = XObject.XDeserialize<ConcurrentDictionaries>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new ConcurrentDictionaries(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -128,10 +128,10 @@ namespace XObjectSerializer.Tests
         {
             ConcurrentQueues example = new ConcurrentQueues(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new ConcurrentQueues(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             ConcurrentQueues deserializeObj = XObject.XDeserialize<ConcurrentQueues>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new ConcurrentQueues(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
         [TestMethod]
@@ -139,10 +139,10 @@ namespace XObjectSerializer.Tests
         {
             ConcurrentStacks example = new ConcurrentStacks(32);
             string serialize = XObject.XSerialize(example);
-            Console.WriteLine($"new ConcurrentStacks(32) Serialize:\n{serialize}");
+            Console.WriteLine($"Serialize:\n{serialize}");
             ConcurrentStacks deserializeObj = XObject.XDeserialize<ConcurrentStacks>(serialize);
             string deserialize = XObject.XSerialize(deserializeObj);
-            Console.WriteLine($"new ConcurrentStacks(32) Deserialize:\n{deserialize}");
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
             Assert.IsTrue(deserialize.Length == serialize.Length);
         }
 

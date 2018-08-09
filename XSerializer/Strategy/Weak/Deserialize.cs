@@ -6,8 +6,13 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections;
 using System.Diagnostics;
+using XObjectSerializer.Helpers;
+using XObjectSerializer.Interfaces;
+using XObjectSerializer.Exceptions;
+using XObjectSerializer.Strategy.Code;
+using XObjectSerializer.Attributes;
 
-namespace XObjectSerializer
+namespace XObjectSerializer.Strategy.Weak
 {
     internal class Deserialize : Builder
     {
@@ -196,6 +201,7 @@ namespace XObjectSerializer
 
         private object ComplexBuilder(Type type, string x)
         {
+            XIgnoreClassAttribute ignoreClass = type.GetCustomAttribute<XIgnoreClassAttribute>(false);
             object o = Activator.CreateInstance(type);
             Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
             MatchCollection matches = rx.Matches(x);
@@ -204,6 +210,12 @@ namespace XObjectSerializer
             foreach (PropertyInfo pi in EachHelper.EachProps(o))
             {
                 ++count;
+                if (pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
+                    (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name)))
+                {
+                    continue;
+                }
+
                 if (matches.Count <= count) break;
                 string value = matches[count].Value;
                 if (!Regex.IsMatch(value, string.Format(Queries.PRF, count), RegexOptions.Compiled)) continue;
@@ -213,6 +225,8 @@ namespace XObjectSerializer
         }
         private object CollectionBuilder(Type type, string x)
         {
+            XIgnoreClassAttribute ignoreClass = type.GetCustomAttribute<XIgnoreClassAttribute>(false);
+
             Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
             MatchCollection matches = rx.Matches(x);
             string anyQ = string.Format(Queries.ANY, "I");
@@ -222,6 +236,12 @@ namespace XObjectSerializer
             foreach (PropertyInfo pi in EachHelper.EachProps(proxyCollection.Collection))
             {
                 ++count;
+                if (pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
+                    (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name)))
+                {
+                    continue;
+                }
+
                 if (matches.Count <= count) break;
                 string value = matches[count].Value;
                 if (!Regex.IsMatch(value, string.Format(Queries.PRF, count), RegexOptions.Compiled)) continue;

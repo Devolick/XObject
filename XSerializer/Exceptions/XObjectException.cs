@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XObjectSerializer
+namespace XObjectSerializer.Exceptions
 {
     public class XObjectException: Exception
     {

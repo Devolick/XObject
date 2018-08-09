@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace XObjectSerializer
+namespace XObjectSerializer.Helpers
 {
     internal static class EachHelper
     {
