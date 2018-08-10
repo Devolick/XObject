@@ -15,7 +15,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/Devolick/XObject/master/LICENSE</PackageLicenseUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>XObjectSerializer.pfx</AssemblyOriginatorKeyFile>
-    <Version>2.1</Version>
+    <Version>2.1.2</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
