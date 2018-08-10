@@ -40,17 +40,41 @@ namespace XObjectSerializer.Strategy.Weak
         protected string DateTimeBlock(Type type, object o)
         {
             string value = AddProtect($"{((DateTime)o).ToString(dateFormat, dateFormatProvider)}");
-            return $"'{value}'";
+            if (!SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
         }
         protected string EnumBlock(Type type, object o)
         {
             string value = ((int)o).ToString();
-            return $"'{value}'";
+            if (!SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
         }
         protected string NumberBlock(Type type, object o)
         {
             string value = o.ToString();
-            return $"'{value}'";
+            if (!SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
         }
         protected string StringBlock(Type type, object o)
         {
@@ -58,7 +82,15 @@ namespace XObjectSerializer.Strategy.Weak
             if (string.IsNullOrEmpty(value)) return null;
 
             value = AddProtect(value);
-            return $"'{value}'";
+            if (!SmartReferenceExists(value))
+            {
+                AddSmartReference(value);
+                return $"'{value}'";
+            }
+            else
+            {
+                return $"'`{SameObject(value, false)}'";
+            }
         }
         protected string KeyPairBlock(Type type, object o)
         {
