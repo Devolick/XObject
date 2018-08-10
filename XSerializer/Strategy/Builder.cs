@@ -18,20 +18,27 @@ namespace XObjectSerializer.Strategy
         private bool ignoreRootReference;
         protected string dateFormat;
         protected IFormatProvider dateFormatProvider;
+        protected Mechanism machanism;
 
         internal Builder()
         {
             stringPointer = 0;
             references = new List<object>(128);
             ignoreRootReference = true;
+            machanism = Mechanism.Weak;
         }
-        internal Builder(string dateFormat)
+        internal Builder(Mechanism machanism)
             :this()
+        {
+            this.machanism = machanism;
+        }
+        internal Builder(Mechanism machanism, string dateFormat)
+            :this(machanism)
         {
             this.dateFormat = dateFormat;
         }
-        internal Builder(string dateFormat, IFormatProvider dateFormatProvider)
-            :this(dateFormat)
+        internal Builder(Mechanism machanism, string dateFormat, IFormatProvider dateFormatProvider)
+            :this(machanism, dateFormat)
         {
             this.dateFormatProvider = dateFormatProvider;
         }
@@ -208,7 +215,21 @@ namespace XObjectSerializer.Strategy
         }
         #endregion
 
-
+        #region Strong Type
+        protected string GeneratePropertyKey(string propertyName)
+        {
+            int key = 0;
+            for (int i = 0; i < propertyName.Length; i++)
+            {
+                key += propertyName[i];
+            }
+            return key.ToString("X");
+        }
+        protected bool EqualsPropertyKey(string hexKey, string propertyName)
+        {
+            return GeneratePropertyKey(propertyName) == hexKey;
+        }
+        #endregion
 
         internal object Clone(object o)
         {

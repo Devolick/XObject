@@ -7,21 +7,19 @@ namespace XObjectSerializer.Helpers
 {
     internal static class Queries
     {
-        internal const string OBJ = @"([0-9]+|[A-Z])(""((`[0-9]+)|(([0-9]+|[A-Z]))(?:('(''|[^'])+')|(""(?:(?=[0-9]+|\0)|[^""])+""))){1,}"")";
-        internal const string VAL = @"[0-9A-Z]+'(?:''|[^'])+'";
+        internal const string OBJECT = @"([0-9]+|[A-Z])(""((`[0-9]+)|(([0-9]+|[A-Z]))(?:('(''|[^'])+')|(""(?:(?=[0-9]+|\0)|[^""])+""))){1,}"")";
+        internal const string VALUE = @"[0-9A-Z]+'(?:''|[^'])+'";
         internal const string BODY = @"(?<=&[""']).+(?=[""'])";
-        internal const string VALD = @"^&(""((`[0-9]+)|(([0-9]+|[A-Z]))(?:('(''|[^'])+')|(""(?:(?=[0-9]+|\0)|[^""])+""))){1,}"")$";
-        internal const string PRF = @"^{0}[""']";
-        internal const string CENT = @"((?<=[""']).+(?=[""']$))";
-        internal const string ANY = @"^{0}[""']";
-        internal const string IPNT = @"^`[0-9]$";
-        internal const string NMB = @"((?<=[""'])#{0}(?=[""']$))";
-        internal const string PRT = @"(?<=[^{0}]){0}(?=[])";
+        internal const string VALID = @"^&(""((`[0-9]+)|(([0-9]+|[A-Z]))(?:('(''|[^'])+')|(""(?:(?=[0-9]+|\0)|[^""])+""))){1,}"")$";
+        internal const string PREFIX = @"^{0}[""']";
+        internal const string GETPREFIX = @"^{0}(?=[""'])";
+        internal const string GETDATA = @"((?<=[""']).+(?=[""']$))";
+        internal const string INNERPOINTER = @"^`[0-9]$";
 
         //Old Logic 
         internal static string[] RSTRINGS = new string[4] { "`", "'", "\"", "#" };
 
-        internal static string First(this MatchCollection collection, Func<string,bool> func)
+        internal static string FirstDefault(this MatchCollection collection, Func<string,bool> func)
         {
             foreach (Match match in collection)
             {

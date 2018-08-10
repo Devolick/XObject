@@ -12,16 +12,21 @@ using XObjectSerializer.Exceptions;
 using XObjectSerializer.Strategy.Code;
 using XObjectSerializer.Attributes;
 
-namespace XObjectSerializer.Strategy
+namespace XObjectSerializer.Strategy.Weak
 {
     internal class Deserialize : Builder
     {
         internal Deserialize()
         { }
-        internal Deserialize(string dateFormat)
-            : base(dateFormat) { }
-        internal Deserialize(string dateFormat, IFormatProvider dateFormatProvider)
-            : base(dateFormat, dateFormatProvider) { }
+        internal Deserialize(Mechanism machanism)
+            : base(machanism)
+        {
+
+        }
+        internal Deserialize(Mechanism machanism, string dateFormat)
+            : base(machanism,dateFormat) { }
+        internal Deserialize(Mechanism machanism, string dateFormat, IFormatProvider dateFormatProvider)
+            : base(machanism,dateFormat, dateFormatProvider) { }
 
         protected object BooleanBlock(Type type, string x)
         {
@@ -29,7 +34,7 @@ namespace XObjectSerializer.Strategy
         }
         protected object CollectionBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT))
+            if (Regex.IsMatch(x, Queries.INNERPOINTER))
             {
                 return GetReference(int.Parse(x.Remove(0, 1)), true);
             }
@@ -43,7 +48,7 @@ namespace XObjectSerializer.Strategy
         }
         protected object ComplexBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
+            if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
                 return GetReference(int.Parse(x.Remove(0, 1)), true);
             }
@@ -58,7 +63,7 @@ namespace XObjectSerializer.Strategy
         protected object DateTimeBlock(Type type, string x)
         {
             x = RemoveProtect(x);
-            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
+            if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
                 return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
@@ -79,7 +84,7 @@ namespace XObjectSerializer.Strategy
         }
         protected object EnumBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
+            if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
                 return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
@@ -92,7 +97,7 @@ namespace XObjectSerializer.Strategy
         }
         protected object KeyPairBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
+            if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
                 return GetReference(int.Parse(x.Remove(0, 1)), true);
             }
@@ -106,7 +111,7 @@ namespace XObjectSerializer.Strategy
         }
         protected object NumberBlock(Type type, string x)
         {
-            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
+            if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
                 return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
             }
@@ -121,7 +126,7 @@ namespace XObjectSerializer.Strategy
         {
             if (string.IsNullOrEmpty(x)) return null;
             x = RemoveProtect(x);
-            if (Regex.IsMatch(x, Queries.IPNT, RegexOptions.Compiled))
+            if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
                 return GetReference(int.Parse(x.Remove(0, 1)), false).ToString();
             }
@@ -199,11 +204,11 @@ namespace XObjectSerializer.Strategy
             }
         }
 
-        private object ComplexBuilder(Type type, string x)
+        protected virtual object ComplexBuilder(Type type, string x)
         {
             XIgnoreClassAttribute ignoreClass = type.GetCustomAttribute<XIgnoreClassAttribute>(false);
             object o = Activator.CreateInstance(type);
-            Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
+            Regex rx = new Regex($"{Queries.OBJECT}|{Queries.VALUE}", RegexOptions.Compiled);
             MatchCollection matches = rx.Matches(x);
 
             int count = -1;
@@ -218,18 +223,18 @@ namespace XObjectSerializer.Strategy
 
                 if (matches.Count <= count) break;
                 string value = matches[count].Value;
-                if (!Regex.IsMatch(value, string.Format(Queries.PRF, count), RegexOptions.Compiled)) continue;
-                pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.CENT, RegexOptions.Compiled).Value));
+                if (!Regex.IsMatch(value, string.Format(Queries.PREFIX, count), RegexOptions.Compiled)) continue;
+                pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             return o;
         }
-        private object CollectionBuilder(Type type, string x)
+        protected virtual object CollectionBuilder(Type type, string x)
         {
             XIgnoreClassAttribute ignoreClass = type.GetCustomAttribute<XIgnoreClassAttribute>(false);
 
-            Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
+            Regex rx = new Regex($"{Queries.OBJECT}|{Queries.VALUE}", RegexOptions.Compiled);
             MatchCollection matches = rx.Matches(x);
-            string anyQ = string.Format(Queries.ANY, "I");
+            string anyQ = string.Format(Queries.PREFIX, "I");
             IEnumerable<string> collectionItems = matches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled));
             ProxyCollection proxyCollection = new ProxyCollection(type, collectionItems.Count());
             int count = -1;
@@ -244,12 +249,12 @@ namespace XObjectSerializer.Strategy
 
                 if (matches.Count <= count) break;
                 string value = matches[count].Value;
-                if (!Regex.IsMatch(value, string.Format(Queries.PRF, count), RegexOptions.Compiled)) continue;
-                pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.CENT, RegexOptions.Compiled).Value));
+                if (!Regex.IsMatch(value, string.Format(Queries.PREFIX, count), RegexOptions.Compiled)) continue;
+                pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             foreach (string item in collectionItems)
             {
-                proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.CENT, RegexOptions.Compiled).Value));
+                proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             proxyCollection.CreateProxy();
             return proxyCollection.Collection;
@@ -261,17 +266,17 @@ namespace XObjectSerializer.Strategy
             object keyResult = null;
             object valueResult = null;
             ConstructorInfo ctorKeyValue = type.GetConstructor(new[] { key.PropertyType, value.PropertyType });
-            Regex rx = new Regex($"{Queries.OBJ}|{Queries.VAL}", RegexOptions.Compiled);
+            Regex rx = new Regex($"{Queries.OBJECT}|{Queries.VALUE}", RegexOptions.Compiled);
             MatchCollection matches = rx.Matches(x);
             foreach (Match m in matches)
             {
-                if (Regex.IsMatch(m.Value,string.Format(Queries.PRF,0)))
+                if (Regex.IsMatch(m.Value,string.Format(Queries.PREFIX,0)))
                 {
-                    keyResult = Build(key.PropertyType, Regex.Match(m.Value, Queries.CENT, RegexOptions.Compiled).Value);
+                    keyResult = Build(key.PropertyType, Regex.Match(m.Value, Queries.GETDATA, RegexOptions.Compiled).Value);
                 }
                 else
                 {
-                    valueResult = Build(value.PropertyType, Regex.Match(m.Value, Queries.CENT, RegexOptions.Compiled).Value);
+                    valueResult = Build(value.PropertyType, Regex.Match(m.Value, Queries.GETDATA, RegexOptions.Compiled).Value);
                 }
             }
             return ctorKeyValue.Invoke(new object[] { keyResult, valueResult });

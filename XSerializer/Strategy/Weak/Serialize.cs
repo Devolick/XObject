@@ -10,7 +10,7 @@ using XObjectSerializer.Exceptions;
 using XObjectSerializer.Helpers;
 using XObjectSerializer.Interfaces;
 
-namespace XObjectSerializer.Strategy
+namespace XObjectSerializer.Strategy.Weak
 {
     internal class Serialize : Builder
     {
@@ -18,12 +18,17 @@ namespace XObjectSerializer.Strategy
         {
 
         }
-        internal Serialize(string dateFormat)
-            : base(dateFormat) {
+        internal Serialize(Mechanism machanism)
+            :base(machanism)
+        {
 
         }
-        internal Serialize(string dateFormat, IFormatProvider dateFormatProvider)
-            : base(dateFormat, dateFormatProvider) {
+        internal Serialize(Mechanism machanism, string dateFormat)
+            : base(machanism, dateFormat) {
+
+        }
+        internal Serialize(Mechanism machanism, string dateFormat, IFormatProvider dateFormatProvider)
+            : base(machanism, dateFormat, dateFormatProvider) {
 
         }
 
@@ -71,14 +76,27 @@ namespace XObjectSerializer.Strategy
                 return $"\"`{SameObject(o, false)}\"";
             }
         }
-        protected string CollectionBlock(Type type, object o)
+        protected string NullableBlock(Type type, object o)
+        {
+            if (o != null)
+            {
+                return BuildBlocks(type.GetGenericArguments()[0], o);
+            }
+            return null;
+        }
+        protected string DBNullBlock(Type type, object o)
+        {
+            return string.Empty;
+        }
+
+        protected virtual string CollectionBlock(Type type, object o)
         {
             XIgnoreClassAttribute ignoreClass = type.GetCustomAttribute<XIgnoreClassAttribute>(false);
 
             if (!ReferenceExists(o))
             {
                 (o as IXObject)?.XSerialize(o);
-                StringBuilder complex = new StringBuilder(128);
+                StringBuilder complex = new StringBuilder(64);
                 int count = -1;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
@@ -86,7 +104,8 @@ namespace XObjectSerializer.Strategy
                     object piValue = pi.GetValue(o);
                     if (piValue == null ||
                         pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
-                        (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name))) {
+                        (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name)))
+                    {
                         continue;
                     }
                     string value = BuildBlocks(pi.PropertyType, piValue);
@@ -110,14 +129,14 @@ namespace XObjectSerializer.Strategy
                 return $"\"`{SameObject(o, true)}\"";
             }
         }
-        protected string ComplexBlock(Type type, object o)
+        protected virtual string ComplexBlock(Type type, object o)
         {
             XIgnoreClassAttribute ignoreClass = type.GetCustomAttribute<XIgnoreClassAttribute>(false);
 
             if (!ReferenceExists(o))
             {
                 (o as IXObject)?.XSerialize(o);
-                StringBuilder complex = new StringBuilder(128);
+                StringBuilder complex = new StringBuilder(64);
                 int count = -1;
                 foreach (PropertyInfo pi in EachHelper.EachProps(o))
                 {
@@ -143,20 +162,8 @@ namespace XObjectSerializer.Strategy
                 return $"\"`{SameObject(o, true)}\"";
             }
         }
-        protected string NullableBlock(Type type, object o)
-        {
-            if (o != null)
-            {
-                return BuildBlocks(type.GetGenericArguments()[0], o);
-            }
-            return null;
-        }
-        protected string DBNullBlock(Type type, object o)
-        {
-            return string.Empty;
-        }
 
-        private string BuildBlocks(Type type, object o)
+        protected string BuildBlocks(Type type, object o)
         {
             if (IsNullableType(type))
             {
