@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using XObjectSerializer.Exceptions;
 using XObjectSerializer.Helpers;
 
@@ -46,7 +47,8 @@ namespace XObjectSerializer.Tools
                     }
                     else if (pi.Name == path[count] && count == path.Length - 1)
                     {
-                        pi.SetValue(tg, value);
+                        object result = Clone(value.GetType(), value);
+                        pi.SetValue(tg, result);
                         return true;
                     }
                 }
@@ -75,7 +77,8 @@ namespace XObjectSerializer.Tools
                     }
                     else if (pi.Name == path[count] && count == path.Length - 1)
                     {
-                        pi.SetValue(tg, MergeValue());
+                        object result = MergeValue();
+                        pi.SetValue(tg, Clone(result.GetType(), result));
                         return true;
                     }
                 }
@@ -111,6 +114,15 @@ namespace XObjectSerializer.Tools
 
             return null;
         }
-
+        private object Clone(Type type, object o)
+        {
+            using(Strategy.Weak.Serialize serialize =new Strategy.Weak.Serialize(Mechanism.Weak))
+            {
+                using (Strategy.Weak.Deserialize deserialize = new Strategy.Weak.Deserialize(Mechanism.Weak))
+                {
+                    return deserialize.Build(type, Regex.Match(serialize.Build(type, o), Queries.BODY, RegexOptions.Compiled).Value);
+                }
+            }
+        }
     }
 }

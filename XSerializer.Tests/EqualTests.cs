@@ -43,7 +43,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym"
             };
-            string serialize = XObject.XSerialize(valid);
+            string serialize = XObject.XSerialize(valid, Mechanism.Weak);
             Assert.IsTrue(serialize == test);
         }
         [TestMethod]
@@ -55,7 +55,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidCheckProtectString()
@@ -66,7 +66,7 @@ namespace XObjectSerializer.Tests
                 Int = 5,
                 Str = @"`Dzmitri ' "" Dym"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidCheckProtectString()
@@ -77,7 +77,7 @@ namespace XObjectSerializer.Tests
                 Int = 5,
                 Str = @"`Dzmitry ' "" Dym"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
     }
 }

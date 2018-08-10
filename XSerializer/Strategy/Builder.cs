@@ -136,10 +136,14 @@ namespace XObjectSerializer.Strategy
         }
         protected void AddReference(object o)
         {
+            if (o == null) return;
+
             references.Add(o);
         }
         protected void AddSmartReference(string o)
         {
+            if (string.IsNullOrEmpty(o)) return;
+
             if (Math.Floor(Math.Log10(references.Count) + 1) >
                 Math.Floor(Math.Log10(o.Length) + 1)) return;
             references.Add(o);
@@ -148,7 +152,7 @@ namespace XObjectSerializer.Strategy
         {
             if (clone)
             {
-                return Clone(references[id]);
+                return Clone(references[id].GetType(), references[id]);
             }
             else
             {
@@ -231,9 +235,15 @@ namespace XObjectSerializer.Strategy
         }
         #endregion
 
-        internal object Clone(object o)
+        internal object Clone(Type type, object o)
         {
-            return XObject.Clone(o);
+            using (Strategy.Weak.Serialize serialize = new Strategy.Weak.Serialize(Mechanism.Weak))
+            {
+                using (Strategy.Weak.Deserialize deserialize = new Strategy.Weak.Deserialize(Mechanism.Weak))
+                {
+                    return deserialize.Build(type, serialize.Build(type, o));
+                }
+            }
         }
 
         public void Dispose()

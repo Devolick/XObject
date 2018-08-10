@@ -14,7 +14,7 @@ namespace XObjectSerializer.Tests
             Types types = new Types();
             Types types2 = XObject.Clone(types);
 
-            Assert.IsTrue(XObject.XSerialize(types) == XObject.XSerialize(types2));
+            Assert.IsTrue(XObject.XSerialize(types, Mechanism.Weak) == XObject.XSerialize(types2, Mechanism.Weak));
         }
         [TestMethod]
         public void StructClone()
@@ -22,7 +22,7 @@ namespace XObjectSerializer.Tests
             KeyValuePair<string, int> types = new KeyValuePair<string, int>("Dzmitry",1234);
             KeyValuePair<string, int> types2 = XObject.Clone(types);
 
-            Assert.IsTrue(XObject.XSerialize(types) == XObject.XSerialize(types2));
+            Assert.IsTrue(XObject.XSerialize(types, Mechanism.Weak) == XObject.XSerialize(types2, Mechanism.Weak));
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace XObjectSerializer.Tests
             XObject.Partially(person, "Ritchie", "Info.LastName");
 
             Assert.IsTrue(
-                person.Info.FirstName == "Dennis" && 
+                person.Info.FirstName == "Dennis" &&
                 person.Info.LastName == "Ritchie");
         }
         [TestMethod]

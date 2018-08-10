@@ -60,7 +60,7 @@ namespace XObjectSerializer.Tests
                 case TypeCode.Int32:
                     return (int)(next > Int32.MaxValue ? Int32.MaxValue : next);
                 case TypeCode.Int64:
-                    return (int)(next > Int64.MaxValue ? Int64.MaxValue : next);
+                    return next;
                 case TypeCode.SByte:
                     return (int)(next > SByte.MaxValue ? SByte.MaxValue : next);
                 case TypeCode.Single:

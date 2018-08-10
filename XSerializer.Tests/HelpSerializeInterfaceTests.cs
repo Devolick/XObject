@@ -16,14 +16,14 @@ namespace XObjectSerializer.Tests
             {
                 Value = "Change in Class"
             };
-            Console.WriteLine(XObject.XSerialize(helpInterface));
-            Assert.IsTrue(XObject.XSerialize(helpInterface) == test);
+            Console.WriteLine(XObject.XSerialize(helpInterface, Mechanism.Weak));
+            Assert.IsTrue(XObject.XSerialize(helpInterface, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ClassDeserializeChanges()
         {
             string test = @"&""0'XDeserialize'";
-            Assert.IsTrue(XObject.XDeserialize<ClassHelpInterface>(test).Value == "XDeserialize");
+            Assert.IsTrue(XObject.XDeserialize<ClassHelpInterface>(test, Mechanism.Weak).Value == "XDeserialize");
         }
 
         [TestMethod]
@@ -34,14 +34,14 @@ namespace XObjectSerializer.Tests
             {
                 Value = "Change in Class"
             };
-            Console.WriteLine(XObject.XSerialize(helpInterface));
-            Assert.IsTrue(XObject.XSerialize(helpInterface) == test);
+            Console.WriteLine(XObject.XSerialize(helpInterface, Mechanism.Weak));
+            Assert.IsTrue(XObject.XSerialize(helpInterface, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void StructDeserializeChanges()
         {
             string test = @"&""0'XDeserialize'";
-            Assert.IsTrue(XObject.XDeserialize<StructHelpInterface>(test).Value == "XDeserialize");
+            Assert.IsTrue(XObject.XDeserialize<StructHelpInterface>(test, Mechanism.Weak).Value == "XDeserialize");
         }
 
     }

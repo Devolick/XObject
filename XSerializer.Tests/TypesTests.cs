@@ -16,10 +16,10 @@ namespace XObjectSerializer.Tests
         public void Types()
         {
             Types types = new Types();
-            string serialize = XObject.XSerialize(types);
+            string serialize = XObject.XSerialize(types, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Types deserializeObj = XObject.XDeserialize<Types>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Types deserializeObj = XObject.XDeserialize<Types>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -27,10 +27,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Bool()
         {
-            string serialize = XObject.XSerialize(true);
+            string serialize = XObject.XSerialize(true, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            bool deserializeObj = XObject.XDeserialize<bool>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            bool deserializeObj = XObject.XDeserialize<bool>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -38,10 +38,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Char()
         {
-            string serialize = XObject.XSerialize('A');
+            string serialize = XObject.XSerialize('A', Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Char deserializeObj = XObject.XDeserialize<Char>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Char deserializeObj = XObject.XDeserialize<Char>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -49,10 +49,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Sbyte()
         {
-            string serialize = XObject.XSerialize(111);
+            string serialize = XObject.XSerialize(111, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            sbyte deserializeObj = XObject.XDeserialize<sbyte>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            sbyte deserializeObj = XObject.XDeserialize<sbyte>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -60,10 +60,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void UInt16()
         {
-            string serialize = XObject.XSerialize(1234);
+            string serialize = XObject.XSerialize(1234, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            UInt16 deserializeObj = XObject.XDeserialize<UInt16>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            UInt16 deserializeObj = XObject.XDeserialize<UInt16>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -71,10 +71,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void UInt32()
         {
-            string serialize = XObject.XSerialize(1234);
+            string serialize = XObject.XSerialize(1234, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            UInt32 deserializeObj = XObject.XDeserialize<UInt32>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            UInt32 deserializeObj = XObject.XDeserialize<UInt32>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -82,10 +82,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void UInt64()
         {
-            string serialize = XObject.XSerialize(1234);
+            string serialize = XObject.XSerialize(1234, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            UInt64 deserializeObj = XObject.XDeserialize<UInt64>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            UInt64 deserializeObj = XObject.XDeserialize<UInt64>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -93,10 +93,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Int16()
         {
-            string serialize = XObject.XSerialize(1234);
+            string serialize = XObject.XSerialize(1234, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Int16 deserializeObj = XObject.XDeserialize<Int16>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Int16 deserializeObj = XObject.XDeserialize<Int16>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -104,10 +104,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Int32()
         {
-            string serialize = XObject.XSerialize(1234);
+            string serialize = XObject.XSerialize(1234, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Int32 deserializeObj = XObject.XDeserialize<Int32>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Int32 deserializeObj = XObject.XDeserialize<Int32>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -115,10 +115,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Int64()
         {
-            string serialize = XObject.XSerialize(1234);
+            string serialize = XObject.XSerialize(1234, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Int64 deserializeObj = XObject.XDeserialize<Int64>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Int64 deserializeObj = XObject.XDeserialize<Int64>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -126,10 +126,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Double()
         {
-            string serialize = XObject.XSerialize(1234.123);
+            string serialize = XObject.XSerialize(1234.123, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Double deserializeObj = XObject.XDeserialize<Double>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Double deserializeObj = XObject.XDeserialize<Double>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -137,10 +137,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Single()
         {
-            string serialize = XObject.XSerialize(1234);
+            string serialize = XObject.XSerialize(1234, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Single deserializeObj = XObject.XDeserialize<Single>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Single deserializeObj = XObject.XDeserialize<Single>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -148,10 +148,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void Decimal()
         {
-            string serialize = XObject.XSerialize(1234);
+            string serialize = XObject.XSerialize(1234, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Decimal deserializeObj = XObject.XDeserialize<Decimal>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Decimal deserializeObj = XObject.XDeserialize<Decimal>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -159,10 +159,10 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void String()
         {
-            string serialize = XObject.XSerialize("Hello Dzmitry!");
+            string serialize = XObject.XSerialize("Hello Dzmitry!", Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            string deserializeObj = XObject.XDeserialize<string>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            string deserializeObj = XObject.XDeserialize<string>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -171,10 +171,10 @@ namespace XObjectSerializer.Tests
         public void NullableInt()
         {
             Nullable<int> n = 777;
-            string serialize = XObject.XSerialize(n);
+            string serialize = XObject.XSerialize(n, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Nullable<int> deserializeObj = XObject.XDeserialize<Nullable<int>>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Nullable<int> deserializeObj = XObject.XDeserialize<Nullable<int>>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);

@@ -16,10 +16,10 @@ namespace XObjectSerializer.Tests
         public void Types()
         {
             Types types = new Types();
-            string serialize = XObject.XSerialize(types);
+            string serialize = XObject.XSerialize(types, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Types deserializeObj = XObject.XDeserialize<Types>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Types deserializeObj = XObject.XDeserialize<Types>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -28,10 +28,10 @@ namespace XObjectSerializer.Tests
         public void Person()
         {
             Person person = new Person();
-            string serialize = XObject.XSerialize(person);
+            string serialize = XObject.XSerialize(person, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            Person deserializeObj = XObject.XDeserialize<Person>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            Person deserializeObj = XObject.XDeserialize<Person>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize.Length == serialize.Length);

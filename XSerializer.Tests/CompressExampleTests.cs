@@ -16,10 +16,10 @@ namespace XObjectSerializer.Tests
         public void TwoProperties()
         {
             SameReference types = new SameReference();
-            string serialize = XObject.XSerialize(types);
+            string serialize = XObject.XSerialize(types, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            SameReference deserializeObj = XObject.XDeserialize<SameReference>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            SameReference deserializeObj = XObject.XDeserialize<SameReference>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -28,10 +28,10 @@ namespace XObjectSerializer.Tests
         public void ListWithText()
         {
             CompressExample compress1 = new CompressExample();
-            string serialize = XObject.XSerialize(compress1);
+            string serialize = XObject.XSerialize(compress1, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            CompressExample deserializeObj = XObject.XDeserialize<CompressExample>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            CompressExample deserializeObj = XObject.XDeserialize<CompressExample>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -40,10 +40,10 @@ namespace XObjectSerializer.Tests
         public void TwoObjects()
         {
             CompressExample2 compress1 = new CompressExample2();
-            string serialize = XObject.XSerialize(compress1);
+            string serialize = XObject.XSerialize(compress1, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            CompressExample2 deserializeObj = XObject.XDeserialize<CompressExample2>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            CompressExample2 deserializeObj = XObject.XDeserialize<CompressExample2>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);

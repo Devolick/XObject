@@ -12,10 +12,10 @@ namespace XObjectSerializer.Tests
         public void PropertyIngore()
         {
             WrongPropertyAttribute wrong = new WrongPropertyAttribute();
-            string serialize = XObject.XSerialize(wrong);
+            string serialize = XObject.XSerialize(wrong, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            WrongPropertyAttribute deserializeObj = XObject.XDeserialize<WrongPropertyAttribute>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            WrongPropertyAttribute deserializeObj = XObject.XDeserialize<WrongPropertyAttribute>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
@@ -24,10 +24,10 @@ namespace XObjectSerializer.Tests
         public void ClassPropertyIngore()
         {
             WrongClassAttribute wrong = new WrongClassAttribute();
-            string serialize = XObject.XSerialize(wrong);
+            string serialize = XObject.XSerialize(wrong, Mechanism.Weak);
             Console.WriteLine($"Serialize:\n{serialize}");
-            WrongClassAttribute deserializeObj = XObject.XDeserialize<WrongClassAttribute>(serialize);
-            string deserialize = XObject.XSerialize(deserializeObj);
+            WrongClassAttribute deserializeObj = XObject.XDeserialize<WrongClassAttribute>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);

@@ -16,7 +16,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "`Dzmitry Dym"
             };
-            Console.WriteLine(XObject.XSerialize(valid));
+            Console.WriteLine(XObject.XSerialize(valid, Mechanism.Weak));
         }
         [TestMethod]
         public void ValidQueryAccentFirst()
@@ -27,7 +27,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "`Dzmitry Dym"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidQueryAccentEnd()
@@ -38,7 +38,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym`"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidQueryAccentMiddle()
@@ -49,7 +49,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry ` Dym"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryAccentFirst()
@@ -60,7 +60,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "`Dzmitry Dym"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryAccentEnd()
@@ -71,7 +71,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym`"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryAccentMiddle()
@@ -82,7 +82,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry ` Dym"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "'Dzmitry Dym"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidQueryQuoteEnd()
@@ -105,7 +105,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym'"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidQueryQuoteMiddle()
@@ -116,7 +116,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry ' Dym"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryQuoteFirst()
@@ -127,7 +127,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "'Dzmitry Dym"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryQuoteEnd()
@@ -138,7 +138,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry Dym'"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryQuoteMiddle()
@@ -149,7 +149,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = "Dzmitry ' Dym"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
 
         [TestMethod]
@@ -161,7 +161,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"""Dzmitry Dym"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidQueryDoubleQuoteEnd()
@@ -172,7 +172,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"Dzmitry Dym"""
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidQueryDoubleQuoteMiddle()
@@ -183,7 +183,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"Dzmitry "" Dym"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryDoubleQuoteFirst()
@@ -194,7 +194,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"""Dzmitry Dym"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryDoubleQuoteEnd()
@@ -205,7 +205,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"Dzmitry Dym"""
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryDoubleQuoteMiddle()
@@ -216,7 +216,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"Dzmitry "" Dym"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
 
         [TestMethod]
@@ -228,7 +228,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"`"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidQueryOnlyQuotes()
@@ -239,7 +239,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"''"
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid,Mechanism.Weak) == test);
         }
         [TestMethod]
         public void ValidQueryOnlyDoubleQuotes()
@@ -250,7 +250,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @""""""
             };
-            Assert.IsTrue(XObject.XSerialize(valid) == test);
+            Assert.IsTrue(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryOnlyAccents()
@@ -261,7 +261,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"`"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryOnlyQuotes()
@@ -272,7 +272,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @"'"
             };
-            Assert.IsFalse(XObject.XSerialize(valid) == test);
+            Assert.IsFalse(XObject.XSerialize(valid, Mechanism.Weak) == test);
         }
         [TestMethod]
         public void InvalidQueryOnlyDoubleQuotes()
@@ -283,7 +283,7 @@ namespace XObjectSerializer.Tests
                 Int = 4,
                 Str = @""""
             };
-            string serialize = XObject.XSerialize(valid);
+            string serialize = XObject.XSerialize(valid, Mechanism.Weak);
             Assert.IsFalse(serialize == test);
         }
     }
