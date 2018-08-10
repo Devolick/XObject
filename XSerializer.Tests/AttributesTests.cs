@@ -6,7 +6,7 @@ using System.Text;
 namespace XObjectSerializer.Tests
 {
     [TestClass]
-    public class XAttributesTests
+    public class AttributesTests
     {
         [TestMethod]
         public void PropertyIngore()

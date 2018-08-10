@@ -10,7 +10,7 @@ using System.Text;
 namespace XObjectSerializer.Tests
 {
     [TestClass]
-    public class XCompressExampleTests
+    public class CompressExampleTests
     {
         [TestMethod]
         public void TwoProperties()
@@ -47,6 +47,22 @@ namespace XObjectSerializer.Tests
             Console.WriteLine($"\nDeserialize:\n{deserialize}");
 
             Assert.IsTrue(deserialize == serialize);
+        }
+        [TestMethod]
+        public void ItsCompressedWeak()
+        {
+            string personFile = @"&""1""0'Dzmitry'1'Dym'2'27'3'`2'""2'1234pin'""";
+            string serializePerson = XObject.XSerialize(new Person(), Mechanism.Weak);
+
+            Assert.IsTrue(personFile == serializePerson);
+        }
+        [TestMethod]
+        public void ItsCompressedStrong()
+        {
+            string personFile = @"&""18C""389'Dzmitry'315'Dym'10D'27'291'`2'""266'1234pin'""";
+            string serializePerson = XObject.XSerialize(new Person(), Mechanism.Strong);
+
+            Assert.IsTrue(personFile == serializePerson);
         }
         //[TestMethod]
         //public void Test()

@@ -10,7 +10,7 @@ using System.Text;
 namespace XObjectSerializer.Tests
 {
     [TestClass]
-    public class XObjectsTests
+    public class ObjectsTests
     {
         [TestMethod]
         public void Types()

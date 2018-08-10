@@ -6,7 +6,7 @@ using System.Text;
 namespace XObjectSerializer.Tests
 {
     [TestClass]
-    public class XCloneTests
+    public class CloneTests
     {
         [TestMethod]
         public void ClassClone()
