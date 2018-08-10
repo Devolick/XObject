@@ -13,19 +13,39 @@ namespace XObjectSerializer.Strategy.Code
     {
         public Type Type { get; private set; }
         public Type ItemType { get; private set; }
-        internal object Collection { get; private set; }
+        internal object CollectionObject { get; private set; }
         private IList innerList;
         private IDictionary innerDictionary;
         private ConstructorInfo proxyConstructor;
+        private int capacity;
+        private int count = 0;
 
         internal ProxyCollection(Type type,int capacity)
         {
+            this.capacity = capacity;
             Type = type;
-            Contructor();
+            FindType();
         }
-        private void Contructor()
+        private void FindType() {
+            if (Type.IsArray)
+            {
+                Array();
+            }
+            else
+            {
+                Collection();
+            }
+        }
+        private void Array()
         {
-            Collection = Activator.CreateInstance(Type);
+            innerList = (IList)Activator.CreateInstance(Type, new object[] { capacity });
+            ItemType = Type.GetElementType();
+
+            CollectionObject = innerList;
+        }
+        private void Collection()
+        {
+            CollectionObject = Activator.CreateInstance(Type);
             Type type = Type;
             Type em = typeof(IEnumerable);
             BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
@@ -65,27 +85,37 @@ namespace XObjectSerializer.Strategy.Code
         }
         internal void Push(object value)
         {
-            if(innerDictionary != null)
+            if (Type.IsArray)
             {
-                Type type = value.GetType();
-                PropertyInfo k = type.GetProperty("Key");
-                PropertyInfo v = type.GetProperty("Value");
-                innerDictionary.Add(k.GetValue(value), v.GetValue(value));
+                innerList[count++] = value;
             }
             else
             {
-                innerList.Add(value);
+                if (innerDictionary != null)
+                {
+                    Type type = value.GetType();
+                    PropertyInfo k = type.GetProperty("Key");
+                    PropertyInfo v = type.GetProperty("Value");
+                    innerDictionary.Add(k.GetValue(value), v.GetValue(value));
+                }
+                else
+                {
+                    innerList.Add(value);
+                }
             }
         }
         internal void CreateProxy()
         {
-            if (innerDictionary != null)
+            if(!Type.IsArray)
             {
-                proxyConstructor.Invoke(Collection, new[] { innerDictionary as IEnumerable });
-            }
-            else
-            {
-                proxyConstructor.Invoke(Collection, new[] { innerList as IEnumerable });
+                if (innerDictionary != null)
+                {
+                    proxyConstructor.Invoke(CollectionObject, new[] { innerDictionary as IEnumerable });
+                }
+                else
+                {
+                    proxyConstructor.Invoke(CollectionObject, new[] { innerList as IEnumerable });
+                }
             }
         }
     }

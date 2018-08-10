@@ -13,6 +13,19 @@ namespace XObjectSerializer.Tests
     public class CollectionsTests
     {
         [TestMethod]
+        public void Array()
+        {
+            Person person = new Person();
+            Person[] arr = new Person[3] { person, person, person };
+            string serialize = XObject.XSerialize(arr, Mechanism.Weak);
+            Console.WriteLine($"Serialize:\n{serialize}");
+            Person[] deserializeObj = XObject.XDeserialize<Person[]>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
+
+            Assert.IsTrue(deserialize.Length == serialize.Length);
+        }
+        [TestMethod]
         public void Lists()
         {
             Lists example = new Lists(32);

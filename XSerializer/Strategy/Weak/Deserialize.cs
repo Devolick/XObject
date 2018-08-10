@@ -36,7 +36,7 @@ namespace XObjectSerializer.Strategy.Weak
         {
             if (Regex.IsMatch(x, Queries.INNERPOINTER))
             {
-                return GetReference(int.Parse(x.Remove(0, 1)), true);
+                return GetReference(int.Parse(x.Remove(0, 1)));
             }
             else
             {
@@ -50,7 +50,7 @@ namespace XObjectSerializer.Strategy.Weak
         {
             if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
-                return GetReference(int.Parse(x.Remove(0, 1)), true);
+                return GetReference(int.Parse(x.Remove(0, 1)));
             }
             else
             {
@@ -65,7 +65,7 @@ namespace XObjectSerializer.Strategy.Weak
             x = RemoveProtect(x);
             if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
-                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
+                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1))), Type.GetTypeCode(type));
             }
             else
             {
@@ -86,7 +86,7 @@ namespace XObjectSerializer.Strategy.Weak
         {
             if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
-                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
+                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1))), Type.GetTypeCode(type));
             }
             else
             {
@@ -99,7 +99,7 @@ namespace XObjectSerializer.Strategy.Weak
         {
             if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
-                return GetReference(int.Parse(x.Remove(0, 1)), true);
+                return GetReference(int.Parse(x.Remove(0, 1)));
             }
             else
             {
@@ -113,7 +113,7 @@ namespace XObjectSerializer.Strategy.Weak
         {
             if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
-                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1)), false), Type.GetTypeCode(type));
+                return Convert.ChangeType(GetReference(int.Parse(x.Remove(0, 1))), Type.GetTypeCode(type));
             }
             else
             {
@@ -128,7 +128,7 @@ namespace XObjectSerializer.Strategy.Weak
             x = RemoveProtect(x);
             if (Regex.IsMatch(x, Queries.INNERPOINTER, RegexOptions.Compiled))
             {
-                return GetReference(int.Parse(x.Remove(0, 1)), false).ToString();
+                return GetReference(int.Parse(x.Remove(0, 1))).ToString();
             }
             else
             {
@@ -220,10 +220,9 @@ namespace XObjectSerializer.Strategy.Weak
                 {
                     continue;
                 }
-
-                if (matches.Count <= count) break;
-                string value = matches[count].Value;
-                if (!Regex.IsMatch(value, string.Format(Queries.PREFIX, count), RegexOptions.Compiled)) continue;
+                
+                string value = matches.FirstDefault(w => Regex.IsMatch(w, string.Format(Queries.GETPREFIX,count), RegexOptions.Compiled));
+                if (string.IsNullOrEmpty(value)) continue;
                 pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             return o;
@@ -238,7 +237,7 @@ namespace XObjectSerializer.Strategy.Weak
             IEnumerable<string> collectionItems = matches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled));
             ProxyCollection proxyCollection = new ProxyCollection(type, collectionItems.Count());
             int count = -1;
-            foreach (PropertyInfo pi in ReflectionHelper.EachProps(proxyCollection.Collection))
+            foreach (PropertyInfo pi in ReflectionHelper.EachProps(proxyCollection.CollectionObject))
             {
                 ++count;
                 if (pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
@@ -247,17 +246,16 @@ namespace XObjectSerializer.Strategy.Weak
                     continue;
                 }
 
-                if (matches.Count <= count) break;
-                string value = matches[count].Value;
-                if (!Regex.IsMatch(value, string.Format(Queries.PREFIX, count), RegexOptions.Compiled)) continue;
-                pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
+                string value = matches.FirstDefault(w => Regex.IsMatch(w, string.Format(Queries.GETPREFIX, count), RegexOptions.Compiled));
+                if (string.IsNullOrEmpty(value)) continue;
+                pi.SetValue(proxyCollection.CollectionObject, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             foreach (string item in collectionItems)
             {
                 proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             proxyCollection.CreateProxy();
-            return proxyCollection.Collection;
+            return proxyCollection.CollectionObject;
         }
         private object KeyPairBuilder(Type type, string x)
         {

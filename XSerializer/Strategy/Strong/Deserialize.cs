@@ -41,8 +41,8 @@ namespace XObjectSerializer.Strategy.Strong
                     continue;
                 }
 
-                string value = matches.FirstDefault(w => Regex.IsMatch(w, Queries.GETPREFIX, RegexOptions.Compiled));
-                if (!string.IsNullOrEmpty(value)) continue;
+                string value = matches.FirstDefault(w => Regex.IsMatch(w, string.Format(Queries.GETPREFIX, pi.Name), RegexOptions.Compiled));
+                if (string.IsNullOrEmpty(value)) continue;
                 pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             return o;
@@ -56,7 +56,7 @@ namespace XObjectSerializer.Strategy.Strong
             string anyQ = string.Format(Queries.PREFIX, "I");
             IEnumerable<string> collectionItems = matches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled));
             ProxyCollection proxyCollection = new ProxyCollection(type, collectionItems.Count());
-            foreach (PropertyInfo pi in ReflectionHelper.EachProps(proxyCollection.Collection))
+            foreach (PropertyInfo pi in ReflectionHelper.EachProps(proxyCollection.CollectionObject))
             {
                 if (pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
                     (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name)))
@@ -64,16 +64,16 @@ namespace XObjectSerializer.Strategy.Strong
                     continue;
                 }
 
-                string value = matches.FirstDefault(w => Regex.IsMatch(w, Queries.GETPREFIX, RegexOptions.Compiled));
-                if (!string.IsNullOrEmpty(value)) continue;
-                pi.SetValue(proxyCollection.Collection, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
+                string value = matches.FirstDefault(w => Regex.IsMatch(w, string.Format(Queries.GETPREFIX, pi.Name), RegexOptions.Compiled));
+                if (string.IsNullOrEmpty(value)) continue;
+                pi.SetValue(proxyCollection.CollectionObject, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             foreach (string item in collectionItems)
             {
                 proxyCollection.Push(Build(proxyCollection.ItemType, Regex.Match(item, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
             proxyCollection.CreateProxy();
-            return proxyCollection.Collection;
+            return proxyCollection.CollectionObject;
         }
     }
 }

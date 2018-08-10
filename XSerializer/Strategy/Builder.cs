@@ -148,16 +148,9 @@ namespace XObjectSerializer.Strategy
                 Math.Floor(Math.Log10(o.Length) + 1)) return;
             references.Add(o);
         }
-        protected object GetReference(int id, bool clone)
+        protected object GetReference(int id)
         {
-            if (clone)
-            {
-                return Clone(references[id].GetType(), references[id]);
-            }
-            else
-            {
-                return references[id];
-            }
+            return references[id];
         }
         protected int SameObject(object o, bool referenceType)
         {
