@@ -36,7 +36,7 @@ namespace XObjectSerializer.Strategy.Strong
             {
                 (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder(64);
-                foreach (PropertyInfo pi in EachHelper.EachProps(o))
+                foreach (PropertyInfo pi in ReflectionHelper.EachProps(o))
                 {
                     object piValue = pi.GetValue(o);
                     if (piValue == null ||
@@ -74,7 +74,7 @@ namespace XObjectSerializer.Strategy.Strong
             {
                 (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder(64);
-                foreach (PropertyInfo pi in EachHelper.EachProps(o))
+                foreach (PropertyInfo pi in ReflectionHelper.EachProps(o))
                 {
                     object piValue = pi.GetValue(o);
                     if (piValue == null ||

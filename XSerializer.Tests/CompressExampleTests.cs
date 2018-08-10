@@ -64,22 +64,6 @@ namespace XObjectSerializer.Tests
 
             Assert.IsTrue(personFile == serializePerson);
         }
-        //[TestMethod]
-        //public void Test()
-        //{
-        //    SameReference compress1 = new SameReference()
-        //    {
-        //        Ref1 = "Lorem Lorem ipsum Ipsum",
-        //        Ref2 = "ipsum"
-        //    };
-        //    string serialize = XObject.XSerialize(compress1);
-        //    Console.WriteLine($"Serialize:\n{serialize}");
-        //    SameReference deserializeObj = XObject.XDeserialize<SameReference>(serialize);
-        //    string deserialize = XObject.XSerialize(deserializeObj);
-        //    Console.WriteLine($"\nDeserialize:\n{deserialize}");
-
-        //    Assert.IsTrue(deserialize == serialize);
-        //}
 
 
     }

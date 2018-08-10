@@ -6,7 +6,7 @@ using System.Text;
 
 namespace XObjectSerializer.Helpers
 {
-    internal static class EachHelper
+    internal static class ReflectionHelper
     {
         internal static IEnumerable<object> EachValues(object o)
         {
@@ -34,6 +34,5 @@ namespace XObjectSerializer.Helpers
                 yield return propInfo;
             }
         }
-
     }
 }

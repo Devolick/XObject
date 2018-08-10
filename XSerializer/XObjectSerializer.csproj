@@ -11,11 +11,11 @@
     <PackageIconUrl>https://raw.githubusercontent.com/Devolick/XObject/master/XSerializer/xobject_img.ico</PackageIconUrl>
     <RepositoryUrl>https://github.com/Devolick/XObject</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageTags>Serialize, Compress, Complex Object, Files, Strings, Text, Regex, Xml, Json, Custom, Types, List, Dictionary, Clone, Cryptography, Security</PackageTags>
+    <PackageTags>Serialize, Compress, Complex Object, Files, Strings, Text, Regex, Xml, Json, Custom, Types, List, Dictionary, Clone, Cryptography, Security, Copy</PackageTags>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Devolick/XObject/master/LICENSE</PackageLicenseUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>XObjectSerializer.pfx</AssemblyOriginatorKeyFile>
-    <Version>2.0.1</Version>
+    <Version>2.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

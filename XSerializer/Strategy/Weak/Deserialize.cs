@@ -212,7 +212,7 @@ namespace XObjectSerializer.Strategy.Weak
             MatchCollection matches = rx.Matches(x);
 
             int count = -1;
-            foreach (PropertyInfo pi in EachHelper.EachProps(o))
+            foreach (PropertyInfo pi in ReflectionHelper.EachProps(o))
             {
                 ++count;
                 if (pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
@@ -238,7 +238,7 @@ namespace XObjectSerializer.Strategy.Weak
             IEnumerable<string> collectionItems = matches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled));
             ProxyCollection proxyCollection = new ProxyCollection(type, collectionItems.Count());
             int count = -1;
-            foreach (PropertyInfo pi in EachHelper.EachProps(proxyCollection.Collection))
+            foreach (PropertyInfo pi in ReflectionHelper.EachProps(proxyCollection.Collection))
             {
                 ++count;
                 if (pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||

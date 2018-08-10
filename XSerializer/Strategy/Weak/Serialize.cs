@@ -130,7 +130,7 @@ namespace XObjectSerializer.Strategy.Weak
                 (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder(64);
                 int count = -1;
-                foreach (PropertyInfo pi in EachHelper.EachProps(o))
+                foreach (PropertyInfo pi in ReflectionHelper.EachProps(o))
                 {
                     ++count;
                     object piValue = pi.GetValue(o);
@@ -170,7 +170,7 @@ namespace XObjectSerializer.Strategy.Weak
                 (o as IXObject)?.XSerialize(o);
                 StringBuilder complex = new StringBuilder(64);
                 int count = -1;
-                foreach (PropertyInfo pi in EachHelper.EachProps(o))
+                foreach (PropertyInfo pi in ReflectionHelper.EachProps(o))
                 {
                     ++count;
                     object piValue = pi.GetValue(o);

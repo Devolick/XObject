@@ -33,7 +33,7 @@ namespace XObjectSerializer.Strategy.Strong
             Regex rx = new Regex($"{Queries.OBJECT}|{Queries.VALUE}", RegexOptions.Compiled);
             MatchCollection matches = rx.Matches(x);
 
-            foreach (PropertyInfo pi in EachHelper.EachProps(o))
+            foreach (PropertyInfo pi in ReflectionHelper.EachProps(o))
             {
                 if (pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
                     (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name)))
@@ -56,7 +56,7 @@ namespace XObjectSerializer.Strategy.Strong
             string anyQ = string.Format(Queries.PREFIX, "I");
             IEnumerable<string> collectionItems = matches.Where(a => Regex.IsMatch(a, anyQ, RegexOptions.Compiled));
             ProxyCollection proxyCollection = new ProxyCollection(type, collectionItems.Count());
-            foreach (PropertyInfo pi in EachHelper.EachProps(proxyCollection.Collection))
+            foreach (PropertyInfo pi in ReflectionHelper.EachProps(proxyCollection.Collection))
             {
                 if (pi.GetCustomAttribute(typeof(XIgnorePropertyAttribute), false) != null ||
                     (ignoreClass != null && ignoreClass.Properties.Length > 0 && ignoreClass.Properties.Contains(pi.Name)))

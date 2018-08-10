@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using XObjectSerializer.Exceptions;
 using XObjectSerializer.Helpers;
 using XObjectSerializer.Strategy;
+using XObjectSerializer.Tools;
 
 namespace XObjectSerializer
 {
@@ -266,8 +268,34 @@ namespace XObjectSerializer
         public static TClone Clone<TClone>(TClone o)
         {
             if (o == null) throw new XObjectException("It is not permissible to clone a null reference.");
-            string serialize = XObject.XSerialize(o);
-            return XObject.XDeserialize<TClone>(serialize);
+            string serialize = XObject.XSerialize(o, Mechanism.Weak);
+            return XObject.XDeserialize<TClone>(serialize, Mechanism.Weak);
         }
+        /// <summary>
+        /// Pass the property value to the object in the specified property path.
+        /// </summary>
+        /// <param name="target">The object to modify the properties.</param>
+        /// <param name="value">Transmit value along the way.</param>
+        /// <param name="dotPath">Property search path.</param>
+        /// <returns>Indicates the success of the operation.</returns>
+        public static bool Partially(object target, object value, string dotPath)
+        {
+            DeepMaster deepMaster = new DeepMaster(target, value, dotPath);
+            return deepMaster.Partially();
+        }
+        /// <summary>
+        /// Passes to the object the property value of another object of the same type along the specified path.
+        /// </summary>
+        /// <typeparam name="TMerge">Object type</typeparam>
+        /// <param name="target">The object to modify the properties.</param>
+        /// <param name="from">Object value-giving properties.</param>
+        /// <param name="dotPath">Property search path.</param>
+        /// <returns></returns>
+        public static bool Merge<TMerge>(TMerge target, TMerge from, string dotPath)
+        {
+            DeepMaster deepMaster = new DeepMaster(target, from, dotPath);
+            return deepMaster.Merge();
+        }
+
     }
 }
