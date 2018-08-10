@@ -15,7 +15,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/Devolick/XObject/master/LICENSE</PackageLicenseUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>XObjectSerializer.pfx</AssemblyOriginatorKeyFile>
-    <Version>1.2.3</Version>
+    <Version>1.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -26,10 +26,6 @@
     <Compile Remove="Optimization\**" />
     <EmbeddedResource Remove="Optimization\**" />
     <None Remove="Optimization\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Strategy\Strong\" />
   </ItemGroup>
 
 </Project>

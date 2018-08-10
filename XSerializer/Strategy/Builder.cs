@@ -36,6 +36,7 @@ namespace XObjectSerializer.Strategy
             this.dateFormatProvider = dateFormatProvider;
         }
 
+        #region Types
         protected bool IsBoolType(Type type)
         {
             switch (Type.GetTypeCode(type))
@@ -74,7 +75,7 @@ namespace XObjectSerializer.Strategy
             return false;
         }
         protected bool IsEnumType(Type type)
-        { 
+        {
             return type.IsEnum;
         }
         protected bool IsNullableType(Type type)
@@ -97,7 +98,9 @@ namespace XObjectSerializer.Strategy
         {
             return typeof(IEnumerable).IsAssignableFrom(type);
         }
+        #endregion
 
+        #region References
         protected bool ReferenceExists(object o)
         {
             if (ignoreRootReference) { ignoreRootReference = false; return false; };
@@ -147,7 +150,7 @@ namespace XObjectSerializer.Strategy
         }
         protected int SameObject(object o, bool referenceType)
         {
-            if(referenceType)
+            if (referenceType)
             {
                 return references.IndexOf(o);
             }
@@ -174,7 +177,9 @@ namespace XObjectSerializer.Strategy
                     yield return value;
             }
         }
+        #endregion
 
+        #region String Protect
         protected string AddProtect(string value)
         {
             return ProtectString(value, Queries.RSTRINGS, true);
@@ -201,6 +206,9 @@ namespace XObjectSerializer.Strategy
             }
             return value;
         }
+        #endregion
+
+
 
         internal object Clone(object o)
         {

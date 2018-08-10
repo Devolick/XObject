@@ -14,9 +14,11 @@ namespace XObjectSerializer.Helpers
         internal const string PRF = @"^{0}[""']";
         internal const string CENT = @"((?<=[""']).+(?=[""']$))";
         internal const string ANY = @"^{0}[""']";
-        internal const string IPNT = @"^`[0-9]";
+        internal const string IPNT = @"^`[0-9]$";
         internal const string NMB = @"((?<=[""'])#{0}(?=[""']$))";
+        internal const string PRT = @"(?<=[^{0}]){0}(?=[])";
 
+        //Old Logic 
         internal static string[] RSTRINGS = new string[4] { "`", "'", "\"", "#" };
 
         internal static string First(this MatchCollection collection, Func<string,bool> func)

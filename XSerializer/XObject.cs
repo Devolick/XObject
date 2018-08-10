@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using XObjectSerializer.Exceptions;
 using XObjectSerializer.Helpers;
-using XObjectSerializer.Strategy.Weak;
+using XObjectSerializer.Strategy;
 
 namespace XObjectSerializer
 {

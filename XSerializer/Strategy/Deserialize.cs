@@ -12,7 +12,7 @@ using XObjectSerializer.Exceptions;
 using XObjectSerializer.Strategy.Code;
 using XObjectSerializer.Attributes;
 
-namespace XObjectSerializer.Strategy.Weak
+namespace XObjectSerializer.Strategy
 {
     internal class Deserialize : Builder
     {

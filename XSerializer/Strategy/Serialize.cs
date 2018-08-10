@@ -10,7 +10,7 @@ using XObjectSerializer.Exceptions;
 using XObjectSerializer.Helpers;
 using XObjectSerializer.Interfaces;
 
-namespace XObjectSerializer.Strategy.Weak
+namespace XObjectSerializer.Strategy
 {
     internal class Serialize : Builder
     {
