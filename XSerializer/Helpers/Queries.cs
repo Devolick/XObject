@@ -10,7 +10,7 @@ namespace XObjectSerializer.Helpers
         internal const string OBJECT = @"([0-9A-Z]+)(""((`[0-9]+)|(([0-9A-Z]+))(?:('(''|[^'])+')|(""(?:(?=[0-9A-Z]+|\0)|[^""])+""))){1,}"")";
         internal const string VALUE = @"[0-9A-Z]+'(?:''|[^'])+'";
         internal const string BODY = @"(?<=&[""']).+(?=[""'])";
-        internal const string VALID = @"^&(""((`[0-9]+)|(([0-9]+|[A-Z]))(?:('(''|[^'])+')|(""(?:(?=[0-9]+|\0)|[^""])+""))){1,}"")$";
+        internal const string VALID = @"^&(""((([0-9A-Z]+))(?:('(''|[^'])+')|(""(?:(?=[0-9A-Z]+|\0)|[^""])+""))){1,}"")$";
         internal const string PREFIX = @"^{0}[""']";
         internal const string GETPREFIX = @"^{0}(?=[""'])";
         internal const string GETDATA = @"((?<=[""']).+(?=[""']$))";
