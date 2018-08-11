@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Description>Validation Query fixed.</Description>
+    <Description>A serializer for complex objects based on the maximum compression of the file. Used for data transfer, as well as for files. Uses the reflection of identical data. Will help save more space up to 70%. An excellent way to transfer the encryption object.</Description>
     <Authors>Dzmitry Dym</Authors>
     <AssemblyName>XObject</AssemblyName>
     <RootNamespace>XObjectSerializer</RootNamespace>
@@ -15,7 +15,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/Devolick/XObject/master/LICENSE</PackageLicenseUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>XObjectSerializer.pfx</AssemblyOriginatorKeyFile>
-    <Version>2.2.3</Version>
+    <Version>2.2.4</Version>
     <PackageReleaseNotes>Support for serializing arrays is added. Fixed two bugs for deserialization in searching and comparing keys, as well as removing the internal clone, was added by mistake.</PackageReleaseNotes>
   </PropertyGroup>
 
