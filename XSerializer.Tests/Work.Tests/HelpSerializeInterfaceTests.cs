@@ -22,7 +22,7 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void ClassDeserializeChanges()
         {
-            string test = @"&""0'XDeserialize'";
+            string test = @"&""0'old value'";
             Assert.IsTrue(XObject.XDeserialize<ClassHelpInterface>(test, Mechanism.Weak).Value == "XDeserialize");
         }
 
@@ -40,7 +40,7 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void StructDeserializeChanges()
         {
-            string test = @"&""0'XDeserialize'";
+            string test = @"&""0'old value'";
             Assert.IsTrue(XObject.XDeserialize<StructHelpInterface>(test, Mechanism.Weak).Value == "XDeserialize");
         }
 

@@ -84,5 +84,66 @@ namespace XObjectSerializer.Tests
 
             Console.WriteLine($"person1: {JsonConvert.SerializeObject(person1)}");
         }
+        [TestMethod]
+        public void PropertyAttribute()
+        {
+            //Ignore P2 Property
+            WrongPropertyAttribute wrong = new WrongPropertyAttribute();
+            string serialize = XObject.XSerialize(wrong, Mechanism.Weak);
+            Console.WriteLine($"Serialize:\n{serialize}");
+            WrongPropertyAttribute deserializeObj = XObject.XDeserialize<WrongPropertyAttribute>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
+
+            Assert.IsTrue(deserialize == serialize);
+        }
+        [TestMethod]
+        public void ClassAttribute()
+        {
+            //Ignore P2 Property
+            WrongClassAttribute wrong = new WrongClassAttribute();
+            string serialize = XObject.XSerialize(wrong, Mechanism.Weak);
+            Console.WriteLine($"Serialize:\n{serialize}");
+            WrongClassAttribute deserializeObj = XObject.XDeserialize<WrongClassAttribute>(serialize, Mechanism.Weak);
+            string deserialize = XObject.XSerialize(deserializeObj, Mechanism.Weak);
+            Console.WriteLine($"\nDeserialize:\n{deserialize}");
+
+            Assert.IsTrue(deserialize == serialize);
+        }
+        [TestMethod]
+        public void IXObjectClassSerializeChanges()
+        {
+            string test = @"&""0'XSerialize'""";
+            ClassHelpInterface helpInterface = new ClassHelpInterface()
+            {
+                Value = "Change in Class"
+            };
+            Console.WriteLine(XObject.XSerialize(helpInterface, Mechanism.Weak));
+            Assert.IsTrue(XObject.XSerialize(helpInterface, Mechanism.Weak) == test);
+        }
+        [TestMethod]
+        public void IXObjectClassDeserializeChanges()
+        {
+            string test = @"&""0'old value'";
+            Assert.IsTrue(XObject.XDeserialize<ClassHelpInterface>(test, Mechanism.Weak).Value == "XDeserialize");
+        }
+
+        [TestMethod]
+        public void IXObjectStructSerializeChanges()
+        {
+            string test = @"&""0'XSerialize'""";
+            StructHelpInterface helpInterface = new StructHelpInterface()
+            {
+                Value = "Change in Class"
+            };
+            Console.WriteLine(XObject.XSerialize(helpInterface, Mechanism.Weak));
+            Assert.IsTrue(XObject.XSerialize(helpInterface, Mechanism.Weak) == test);
+        }
+        [TestMethod]
+        public void IXObjectStructDeserializeChanges()
+        {
+            string test = @"&""0'old value'";
+            Assert.IsTrue(XObject.XDeserialize<StructHelpInterface>(test, Mechanism.Weak).Value == "XDeserialize");
+        }
     }
 }
