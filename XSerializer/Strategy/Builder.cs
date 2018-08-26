@@ -216,9 +216,20 @@ namespace XObjectSerializer.Strategy
         protected string GeneratePropertyKey(string propertyName)
         {
             int key = 0;
-            for (int i = 0; i < propertyName.Length; i++)
+            unchecked
             {
-                key += propertyName[i];
+                int hash1 = 5381;
+                int hash2 = hash1;
+
+                for (int i = 0; i < propertyName.Length && propertyName[i] != '\0'; i += 2)
+                {
+                    hash1 = ((hash1 << 5) + hash1) ^ propertyName[i];
+                    if (i == propertyName.Length - 1 || propertyName[i + 1] == '\0')
+                        break;
+                    hash2 = ((hash2 << 5) + hash2) ^ propertyName[i + 1];
+                }
+
+                key = hash1 + (hash2 * 1566083941);
             }
             return key.ToString("X");
         }

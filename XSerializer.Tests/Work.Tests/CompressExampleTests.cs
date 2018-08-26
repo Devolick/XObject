@@ -59,7 +59,7 @@ namespace XObjectSerializer.Tests
         [TestMethod]
         public void ItsCompressedStrong()
         {
-            string personFile = @"&""18C""389'Dzmitry'315'Dym'10D'27'291'`2'""266'1234pin'""";
+            string personFile = @"&""A66C44DE""BC64354D'Dzmitry'C4E51AFD'Dym'6ECB7D8B'27'C9CC1809'`2'""DC32D4EE'1234pin'""";
             string serializePerson = XObject.XSerialize(new Person(), Mechanism.Strong);
 
             Assert.IsTrue(personFile == serializePerson);

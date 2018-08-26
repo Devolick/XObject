@@ -41,7 +41,7 @@ namespace XObjectSerializer.Strategy.Strong
                     continue;
                 }
 
-                string value = matches.FirstDefault(w => Regex.IsMatch(w, string.Format(Queries.GETPREFIX, pi.Name), RegexOptions.Compiled));
+                string value = matches.FirstDefault(w => Regex.IsMatch(w, string.Format(Queries.GETPREFIX, GeneratePropertyKey(pi.Name)), RegexOptions.Compiled));
                 if (string.IsNullOrEmpty(value)) continue;
                 pi.SetValue(o, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
@@ -64,7 +64,7 @@ namespace XObjectSerializer.Strategy.Strong
                     continue;
                 }
 
-                string value = matches.FirstDefault(w => Regex.IsMatch(w, string.Format(Queries.GETPREFIX, pi.Name), RegexOptions.Compiled));
+                string value = matches.FirstDefault(w => Regex.IsMatch(w, string.Format(Queries.GETPREFIX, GeneratePropertyKey(pi.Name)), RegexOptions.Compiled));
                 if (string.IsNullOrEmpty(value)) continue;
                 pi.SetValue(proxyCollection.CollectionObject, Build(pi.PropertyType, Regex.Match(value, Queries.GETDATA, RegexOptions.Compiled).Value));
             }
